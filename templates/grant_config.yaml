@@ -1,0 +1,55 @@
+# Grant Writer Skills – Default Configuration
+# Copy to your project root and customize per call.
+
+# ── Funding agency and mechanism ───────────────────────────────────────────
+agency: horizon                  # horizon | erc | msca | uefiscdi | pnrr
+mechanism: ria                   # ria | ia | erc-stg | erc-cog | erc-adg | msca-pf | pn-iii
+language: en                     # en | ro
+
+# ── Proposal metadata ─────────────────────────────────────────────────────
+proposal:
+  title: ""
+  pi_name: ""
+  institution: ""
+  acronym: ""
+
+# ── Specific aims / objectives ─────────────────────────────────────────────
+aims:
+  max_refinement_rounds: 5       # max iterations to refine aims
+  score_threshold: 4             # minimum aim quality score (1-5)
+  codex_review_rounds: 2         # Codex adversarial review passes
+
+# ── Literature search ──────────────────────────────────────────────────────
+literature:
+  max_search_rounds: 3           # iterative search-read-expand cycles
+  min_citations: 30              # target minimum references
+
+# ── Writing ────────────────────────────────────────────────────────────────
+writing:
+  reflection_rounds: 3           # self-critique and revision passes
+
+# ── Budget ─────────────────────────────────────────────────────────────────
+budget:
+  indirect_rate: 0.25            # overhead rate (0.25 = 25%)
+  currency: EUR                  # EUR | RON
+
+# ── Review ─────────────────────────────────────────────────────────────────
+review:
+  revision_cycles: 2             # full review-revise loops
+  score_threshold: 3             # minimum section score before re-drafting
+
+# ── Scientific skills (optional — requires claude-scientific-skills plugin) ──
+scientific_skills:
+  enabled: auto                  # auto (use if available) | true | false
+  enhanced_literature: true      # /research-lookup, /database-lookup, /paper-lookup
+  enhanced_writing: true         # /scientific-writing + /citation-management
+  enhanced_figures: true         # /scientific-visualization for figures
+  enhanced_review: true          # /scientific-critical-thinking in review
+
+# ── Codex integration (optional — requires codex-plugin-cc) ────────────────
+codex:
+  enabled: auto                  # auto (use if available) | true | false
+  panel_review: true             # multi-persona panel review of proposal
+  aims_review: true              # adversarial aims critique via Codex
+  rescue_on_stuck: true          # delegate to Codex when writing stalls
+  agency: auto                   # auto (from agency field) | horizon | erc | uefiscdi | pnrr
