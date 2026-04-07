@@ -1,0 +1,64 @@
+{
+  "skills": {
+    "grant-writer": {
+      "type": "prompt",
+      "path": "skills/grant-writer/SKILL.md"
+    },
+    "grant-writer:foa-analysis": {
+      "type": "prompt",
+      "path": "skills/foa-analysis/SKILL.md"
+    },
+    "grant-writer:landscape": {
+      "type": "prompt",
+      "path": "skills/landscape/SKILL.md"
+    },
+    "grant-writer:aims": {
+      "type": "prompt",
+      "path": "skills/aims/SKILL.md"
+    },
+    "grant-writer:literature": {
+      "type": "prompt",
+      "path": "skills/literature/SKILL.md"
+    },
+    "grant-writer:preliminary-data": {
+      "type": "prompt",
+      "path": "skills/preliminary-data/SKILL.md"
+    },
+    "grant-writer:proposal": {
+      "type": "prompt",
+      "path": "skills/proposal/SKILL.md"
+    },
+    "grant-writer:risk-analysis": {
+      "type": "prompt",
+      "path": "skills/risk-analysis/SKILL.md"
+    },
+    "grant-writer:budget": {
+      "type": "prompt",
+      "path": "skills/budget/SKILL.md"
+    },
+    "grant-writer:supporting-docs": {
+      "type": "prompt",
+      "path": "skills/supporting-docs/SKILL.md"
+    },
+    "grant-writer:compliance": {
+      "type": "prompt",
+      "path": "skills/compliance/SKILL.md"
+    },
+    "grant-writer:review": {
+      "type": "prompt",
+      "path": "skills/review/SKILL.md"
+    },
+    "grant-writer:codex-review": {
+      "type": "prompt",
+      "path": "skills/codex-review/SKILL.md"
+    },
+    "grant-writer:resubmission": {
+      "type": "prompt",
+      "path": "skills/resubmission/SKILL.md"
+    },
+    "grant-writer:revision": {
+      "type": "prompt",
+      "path": "skills/revision/SKILL.md"
+    }
+  }
+}

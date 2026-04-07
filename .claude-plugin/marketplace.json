@@ -1,0 +1,34 @@
+{
+  "name": "grant-writer-skills",
+  "owner": {
+    "name": "stamate"
+  },
+  "metadata": {
+    "description": "Grant proposal writing pipeline for EU and Romanian funding agencies. Orchestrates ideation, writing, budgeting, compliance, and multi-model peer review.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "grant-writer",
+      "description": "Full grant proposal pipeline: FOA analysis, competitive landscape, aims refinement, proposal writing, budget, compliance, and agency-calibrated review.",
+      "source": "./",
+      "skills": [
+        "./skills/grant-writer",
+        "./skills/foa-analysis",
+        "./skills/landscape",
+        "./skills/aims",
+        "./skills/literature",
+        "./skills/preliminary-data",
+        "./skills/proposal",
+        "./skills/risk-analysis",
+        "./skills/budget",
+        "./skills/supporting-docs",
+        "./skills/compliance",
+        "./skills/review",
+        "./skills/codex-review",
+        "./skills/resubmission",
+        "./skills/revision"
+      ]
+    }
+  ]
+}

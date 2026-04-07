@@ -1,0 +1,8 @@
+{
+  "name": "grant-writer",
+  "description": "Grant proposal writing pipeline for EU and Romanian funding agencies. Orchestrates ideation, writing, budgeting, compliance, and multi-model peer review.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Grant Writer Skills Contributors"
+  }
+}

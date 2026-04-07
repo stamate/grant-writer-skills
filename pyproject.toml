@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grant-writer-skills"
+version = "0.1.0"
+description = "Grant proposal writing pipeline for EU and Romanian funding agencies"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Grant Writer Skills Contributors"},
+]
+keywords = ["grants", "research-funding", "claude-code", "skills", "horizon-europe", "erc", "uefiscdi"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "requests>=2.31",
+    "backoff>=2.2",
+    "pymupdf4llm>=0.0.5",
+    "PyMuPDF>=1.23",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/stamate/grant-writer-skills"
+Repository = "https://github.com/stamate/grant-writer-skills"
+
+[tool.setuptools.packages.find]
+include = ["tools*"]

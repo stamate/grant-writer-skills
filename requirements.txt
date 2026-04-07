@@ -1,0 +1,13 @@
+# HTTP & API
+requests>=2.31
+backoff>=2.2
+
+# PDF processing (input only — FOAs and evaluation reports)
+pymupdf4llm>=0.0.5
+PyMuPDF>=1.23
+
+# Configuration
+pyyaml>=6.0
+
+# Terminal output
+rich>=13.0
