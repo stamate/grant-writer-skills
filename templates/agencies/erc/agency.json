@@ -1,0 +1,20 @@
+{
+  "agency": "erc",
+  "mechanism": "Starting/Consolidator/Advanced",
+  "name": "European Research Council Grant",
+  "region": "eu",
+  "language": ["en"],
+  "sections": [
+    {"name": "project_summary", "words": 500, "required": true},
+    {"name": "extended_synopsis", "words": 2500, "required": true},
+    {"name": "scientific_proposal", "words": 7500, "required": true},
+    {"name": "cv_pi", "words": null, "required": true},
+    {"name": "track_record", "words": null, "required": true},
+    {"name": "bibliography", "words": null, "required": true}
+  ],
+  "formatting": {"font": "Times New Roman", "font_size": 11, "margins": "15mm", "line_spacing": "single", "page_limit_synopsis": 5, "page_limit_proposal": 15},
+  "budget": {"model": "person_months", "currency": "EUR", "indirect_rate": 0.25, "indirect_model": "flat_rate", "max_total_starting": 1500000, "max_total_consolidator": 2000000, "max_total_advanced": 2500000, "max_years": 5, "personnel_unit": "person-months"},
+  "citation_style": "numbered",
+  "review_criteria": ["groundbreaking_nature", "methodology", "pi_capability"],
+  "codex_agency": "erc"
+}

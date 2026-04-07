@@ -1,0 +1,22 @@
+{
+  "agency": "horizon",
+  "mechanism": "RIA",
+  "name": "Horizon Europe Research & Innovation Action",
+  "region": "eu",
+  "language": ["en"],
+  "sections": [
+    {"name": "project_summary", "words": 2000, "required": true},
+    {"name": "excellence", "words": 10000, "required": true, "subsections": ["objectives", "methodology", "ambition"]},
+    {"name": "impact", "words": 8000, "required": true, "subsections": ["outcomes", "dissemination", "exploitation"]},
+    {"name": "implementation", "words": 10000, "required": true, "subsections": ["work_plan", "management", "consortium", "resources"]},
+    {"name": "ethics", "words": null, "required": true},
+    {"name": "bibliography", "words": null, "required": true},
+    {"name": "cv_pi", "words": null, "required": true, "per_person": true}
+  ],
+  "formatting": {"font": "Times New Roman or equivalent", "font_size": 11, "margins": "15mm", "line_spacing": "single", "page_limit": 45},
+  "budget": {"model": "person_months", "currency": "EUR", "indirect_rate": 0.25, "indirect_model": "flat_rate", "max_total": null, "max_years": null, "personnel_unit": "person-months", "unit_cost_categories": ["personnel", "subcontracting", "travel", "equipment", "other_goods"]},
+  "citation_style": "numbered",
+  "review_criteria": ["excellence", "impact", "implementation"],
+  "review_weights": {"excellence": 50, "impact": 30, "implementation": 20},
+  "codex_agency": "horizon"
+}

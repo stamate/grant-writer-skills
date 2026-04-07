@@ -1,0 +1,22 @@
+{
+  "agency": "msca",
+  "mechanism": "Postdoctoral Fellowships",
+  "name": "MSCA Postdoctoral Fellowships",
+  "region": "eu",
+  "language": ["en"],
+  "sections": [
+    {"name": "project_summary", "words": 500, "required": true},
+    {"name": "excellence", "words": 5000, "required": true},
+    {"name": "impact", "words": 3000, "required": true},
+    {"name": "implementation", "words": 2000, "required": true},
+    {"name": "cv_researcher", "words": null, "required": true},
+    {"name": "supervision_letter", "words": null, "required": true},
+    {"name": "bibliography", "words": null, "required": true}
+  ],
+  "formatting": {"font": "Times New Roman", "font_size": 11, "margins": "15mm", "line_spacing": "single", "page_limit": 10},
+  "budget": {"model": "person_months", "currency": "EUR", "indirect_rate": 0.25, "indirect_model": "flat_rate", "personnel_unit": "person-months"},
+  "citation_style": "numbered",
+  "review_criteria": ["excellence", "impact", "implementation"],
+  "review_weights": {"excellence": 50, "impact": 30, "implementation": 20},
+  "codex_agency": "msca"
+}

@@ -1,0 +1,22 @@
+{
+  "agency": "uefiscdi",
+  "mechanism": "PD",
+  "name": "UEFISCDI Postdoctoral Research (PD)",
+  "region": "romania",
+  "language": ["en", "ro"],
+  "sections": [
+    {"name": "project_summary", "words": 500, "required": true},
+    {"name": "state_of_the_art", "words": 1500, "required": true},
+    {"name": "objectives", "words": 1000, "required": true},
+    {"name": "methodology", "words": 2000, "required": true},
+    {"name": "work_plan", "words": 800, "required": true},
+    {"name": "expected_results", "words": 800, "required": true},
+    {"name": "bibliography", "words": null, "required": true},
+    {"name": "cv_pi", "words": null, "required": true}
+  ],
+  "formatting": {"font": "Times New Roman", "font_size": 12, "margins": "25mm", "line_spacing": "1.5"},
+  "budget": {"model": "monthly_salary", "currency": "RON", "indirect_rate_cap": 0.25, "max_years": 2, "personnel_unit": "lei/month"},
+  "citation_style": "numbered",
+  "review_criteria": ["scientific_quality", "methodology", "feasibility", "pi_capability", "impact"],
+  "codex_agency": "uefiscdi"
+}

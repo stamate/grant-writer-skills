@@ -1,0 +1,22 @@
+{
+  "agency": "pnrr",
+  "mechanism": "Component 9",
+  "name": "PNRR Component 9 — R&D Support",
+  "region": "romania",
+  "language": ["en", "ro"],
+  "sections": [
+    {"name": "project_summary", "words": 1000, "required": true},
+    {"name": "relevance", "words": 2000, "required": true},
+    {"name": "technical_description", "words": 4000, "required": true},
+    {"name": "work_plan", "words": 1500, "required": true},
+    {"name": "sustainability", "words": 1000, "required": true},
+    {"name": "budget_justification", "words": null, "required": true},
+    {"name": "bibliography", "words": null, "required": true},
+    {"name": "cv_pi", "words": null, "required": true, "per_person": true}
+  ],
+  "formatting": {"font": "Times New Roman", "font_size": 12, "margins": "25mm", "line_spacing": "1.5"},
+  "budget": {"model": "monthly_salary", "currency": "RON", "indirect_rate_cap": 0.15, "max_years": 3, "personnel_unit": "lei/month"},
+  "citation_style": "numbered",
+  "review_criteria": ["relevance_to_pnrr", "technical_quality", "sustainability", "budget_efficiency"],
+  "codex_agency": "pnrr"
+}
