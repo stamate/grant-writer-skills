@@ -1,0 +1,33 @@
+agency: horizon
+mechanism: ria
+language: en
+
+proposal:
+  title: "AI-Enhanced Drug Discovery for Neglected Tropical Diseases"
+  pi_name: "Dr. Maria Ionescu"
+  institution: "University of Bucharest"
+  acronym: "AI-NTD"
+
+aims:
+  max_refinement_rounds: 5
+  score_threshold: 4
+  codex_review_rounds: 2
+
+literature:
+  max_search_rounds: 3
+  min_citations: 30
+
+budget:
+  indirect_rate: 0.25
+  currency: EUR
+
+review:
+  revision_cycles: 2
+  score_threshold: 3
+
+scientific_skills:
+  enabled: auto
+
+codex:
+  enabled: auto
+  agency: horizon

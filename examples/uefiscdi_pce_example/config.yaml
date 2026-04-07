@@ -1,0 +1,24 @@
+agency: uefiscdi
+mechanism: pce
+language: en
+
+proposal:
+  title: "Graph Neural Networks for Protein-Ligand Binding Prediction"
+  pi_name: "Dr. Alexandru Popescu"
+  institution: "Politehnica University of Bucharest"
+  acronym: ""
+
+aims:
+  max_refinement_rounds: 5
+  score_threshold: 4
+
+literature:
+  min_citations: 25
+
+budget:
+  indirect_rate: 0.25
+  currency: RON
+
+codex:
+  enabled: auto
+  agency: uefiscdi
