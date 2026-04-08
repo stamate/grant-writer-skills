@@ -31,12 +31,12 @@ claude plugin marketplace add stamate/grant-writer-skills 2>/dev/null || true
 claude plugin marketplace add stamate/codex-plugin-cc 2>/dev/null || true
 claude plugin marketplace add K-Dense-AI/claude-scientific-skills 2>/dev/null || true
 claude plugin marketplace add K-Dense-AI/claude-scientific-writer 2>/dev/null || true
-claude plugin marketplace add anthropics/claude-plugins-official 2>/dev/null || true
+claude plugin marketplace add jarrodwatts/claude-hud 2>/dev/null || true
 claude plugin marketplace update grant-writer-skills 2>/dev/null || true
 claude plugin marketplace update stm-codex 2>/dev/null || true
 claude plugin marketplace update claude-scientific-skills 2>/dev/null || true
 claude plugin marketplace update claude-scientific-writer 2>/dev/null || true
-claude plugin marketplace update claude-plugins-official 2>/dev/null || true
+claude plugin marketplace update claude-hud 2>/dev/null || true
 echo "  OK"
 
 # 4. Install plugins at project scope
@@ -49,8 +49,8 @@ claude plugin install codex@stm-codex --scope project 2>/dev/null || true
 claude plugin install scientific-skills@claude-scientific-skills --scope project 2>/dev/null || true
 # Scientific writer: enhanced writing, image generation, schematics, Paper2Web
 claude plugin install claude-scientific-writer@claude-scientific-writer --scope project 2>/dev/null || true
-# Superpowers: brainstorming, planning, structured workflows
-claude plugin install superpowers@claude-plugins-official --scope project 2>/dev/null || true
+# Claude HUD: status line display
+claude plugin install claude-hud@claude-hud --scope project 2>/dev/null || true
 echo "  OK"
 
 # 5. Create CLAUDE.md if it doesn't exist
