@@ -69,25 +69,13 @@ No LaTeX installation needed. All output is Markdown. Convert to Word/PDF at sub
 
 ### Install
 
-**Option A -- One command, global install** (recommended):
+**Option A -- One command install** (recommended):
 ```bash
-uv run https://raw.githubusercontent.com/stamate/grant-writer-skills/main/scripts/setup.py
+curl -fsSL https://raw.githubusercontent.com/stamate/grant-writer-skills/main/scripts/install.sh | bash
 ```
-Installs all 3 Claude Code plugins globally (grant-writer-skills + codex-plugin-cc + claude-scientific-skills). No clone needed. Available in all projects.
+Creates `.venv`, installs Python deps, adds all 3 Claude Code plugins at project scope (grant-writer-skills + codex-plugin-cc + claude-scientific-skills), and creates a `CLAUDE.md`.
 
-**Option B -- Project-scoped install**:
-```bash
-uv run https://raw.githubusercontent.com/stamate/grant-writer-skills/main/scripts/setup.py --project
-```
-Installs plugins into `.claude/plugins/` in the current directory only.
-
-**Option C -- Clone + full local setup**:
-```bash
-uv run https://raw.githubusercontent.com/stamate/grant-writer-skills/main/scripts/setup.py --local
-```
-Clones repo + Python deps + project-scoped plugins. Everything contained in one directory.
-
-**Option D -- Minimal**:
+**Option B -- Minimal** (plugin only, no Python deps):
 ```bash
 claude plugin marketplace add stamate/grant-writer-skills
 claude plugin install grant-writer@grant-writer-skills
@@ -96,7 +84,7 @@ claude plugin install grant-writer@grant-writer-skills
 ### Verify
 
 ```bash
-uv run python3 tools/verify_setup.py
+uv run grant-writer-verify
 ```
 
 Checks Python version, required packages, Claude Code CLI, and optional companions (Codex, scientific skills) in one go.
@@ -238,17 +226,17 @@ Human checkpoints at phases 1, 2, 4, 5, 6, 7, and 9 ensure PI control over every
 
 ## Python Tools
 
-All tools are invoked via `uv run python3 tools/<module>.py` from the project root.
+All tools are installed as CLI entry points via `[project.scripts]` in `pyproject.toml`. Use `uv run` to invoke them.
 
-| Tool | Purpose |
-|------|---------|
-| `agency_requirements.py` | Load agency rules from `agency.json` manifests. List agencies, show sections, budget rules, review criteria. |
-| `funded_grants.py` | Query public funding databases (OpenAIRE for EU, UEFISCDI for Romania). Search by topic, PI, agency. |
-| `compliance_checker.py` | Validate proposal against agency requirements: word counts, sections, citations, budget caps, figures. |
-| `budget_calculator.py` | Budget arithmetic for person-months (EU) and monthly salary (Romania) models. Multi-year, multi-currency. |
-| `state_manager.py` | Grant proposal state persistence. Track phase completion, section progress, resume interrupted pipelines. |
-| `config.py` | Load and merge YAML configuration with CLI overrides. |
-| `verify_setup.py` | Validate all prerequisites (Python, packages, Claude CLI, optional Codex, scientific skills). |
+| Command | Purpose |
+|---------|---------|
+| `uv run grant-writer-agency` | Load agency rules from `agency.json` manifests. List agencies, show sections, budget rules, review criteria. |
+| `uv run grant-writer-grants` | Query public funding databases (OpenAIRE for EU, UEFISCDI for Romania). Search by topic, PI, agency. |
+| `uv run grant-writer-compliance` | Validate proposal against agency requirements: word counts, sections, citations, budget caps, figures. |
+| `uv run grant-writer-budget` | Budget arithmetic for person-months (EU) and monthly salary (Romania) models. Multi-year, multi-currency. |
+| `uv run grant-writer-state` | Grant proposal state persistence. Track phase completion, section progress, resume interrupted pipelines. |
+| `uv run grant-writer-config` | Load and merge YAML configuration with CLI overrides. |
+| `uv run grant-writer-verify` | Validate all prerequisites (Python, packages, Claude CLI, optional Codex, scientific skills). |
 | `pdf_reader.py` | PDF text extraction for FOAs and evaluation reports (pymupdf4llm > PyMuPDF > pypdf fallback). |
 
 ## Project Structure
@@ -273,15 +261,15 @@ grant-writer-skills/
 │   ├── codex-review/SKILL.md    #   Standalone Codex review
 │   ├── resubmission/SKILL.md    #   Resubmission handler
 │   └── revision/SKILL.md        #   Revision loop
-├── tools/                     # Python utilities (all via uv run python3)
-│   ├── agency_requirements.py   #   Agency rules database
-│   ├── funded_grants.py         #   Funded grants search
-│   ├── compliance_checker.py    #   Proposal validation
-│   ├── budget_calculator.py     #   Budget calculation
-│   ├── state_manager.py         #   Proposal state
-│   ├── config.py                #   Configuration
-│   ├── verify_setup.py          #   Environment verification
-│   └── pdf_reader.py            #   PDF text extraction
+├── tools/                     # Python utilities (CLI entry points via uv run grant-writer-*)
+│   ├── agency_requirements.py   #   grant-writer-agency
+│   ├── funded_grants.py         #   grant-writer-grants
+│   ├── compliance_checker.py    #   grant-writer-compliance
+│   ├── budget_calculator.py     #   grant-writer-budget
+│   ├── state_manager.py         #   grant-writer-state
+│   ├── config.py                #   grant-writer-config
+│   ├── verify_setup.py          #   grant-writer-verify
+│   └── pdf_reader.py            #   grant-writer-pdf
 ├── templates/
 │   ├── agencies/                #   9 agency templates (agency.json + section templates)
 │   │   ├── horizon_ria/
@@ -297,7 +285,7 @@ grant-writer-skills/
 │   └── review_fewshot/          #   Few-shot review examples
 ├── examples/                  # Example proposal directories
 ├── scripts/
-│   └── setup.py               #   One-command install (uv run from URL)
+│   └── install.sh             #   One-command install (curl | bash)
 ├── CLAUDE.md                  # Claude Code project instructions
 ├── requirements.txt
 └── pyproject.toml

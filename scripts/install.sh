@@ -31,14 +31,14 @@ claude plugin marketplace add stamate/grant-writer-skills 2>/dev/null || true
 claude plugin marketplace add stamate/codex-plugin-cc 2>/dev/null || true
 claude plugin marketplace add K-Dense-AI/claude-scientific-skills 2>/dev/null || true
 claude plugin marketplace update grant-writer-skills 2>/dev/null || true
-claude plugin marketplace update stamate-codex 2>/dev/null || true
+claude plugin marketplace update stm-codex 2>/dev/null || true
 claude plugin marketplace update claude-scientific-skills 2>/dev/null || true
 echo "  OK"
 
 # 4. Install plugins at project scope
 echo "[3/4] Installing plugins..."
 claude plugin install grant-writer@grant-writer-skills --scope project 2>/dev/null || true
-claude plugin install codex@stamate-codex --scope project 2>/dev/null || true
+claude plugin install codex@stm-codex --scope project 2>/dev/null || true
 claude plugin install scientific-skills@claude-scientific-skills --scope project 2>/dev/null || true
 echo "  OK"
 
