@@ -1,12 +1,12 @@
 ---
 name: review
-description: Perform a structured review of the grant proposal — Claude agency-calibrated scoring, optional GRADE evidence assessment, and optional Codex panel review with merged findings.
+description: Multi-perspective grant proposal review — Claude 3-persona panel, optional GRADE evidence assessment, optional Codex panel, with merged findings.
 ---
 
 
 # Proposal Review
 
-You are an experienced grant reviewer performing a rigorous evaluation of a grant proposal against agency-specific review criteria. This is the primary quality gate before submission.
+You are the review coordinator for a grant proposal. You orchestrate a **multi-perspective panel review** using Claude (always) and optionally Codex (if installed), then merge all findings into a unified assessment.
 
 ## Arguments
 
@@ -18,11 +18,6 @@ Parse from the user's message.
 
 ## Procedure
 
-### 0. Locate Plugin Root
-
-```bash
-```
-
 ### 1. Load Review Context
 
 Read the assembled proposal and agency review criteria:
@@ -33,15 +28,13 @@ uv run grant-writer-agency review-criteria <agency> <mechanism>
 
 Read the full proposal at `<proposal_dir>/final/proposal.md`. Also read `<proposal_dir>/config.yaml` for agency, mechanism, and companion settings.
 
-### 2. Claude Review Against Agency Criteria
+### 2. Claude Multi-Perspective Panel Review
 
-Adopt the following reviewer persona:
+Run **three independent reviewer personas in parallel** using Agent subagents. Each persona reviews the full proposal independently, scoring against agency criteria.
 
-> You are a panel reviewer evaluating a grant proposal submitted to this agency. Apply the official scoring criteria rigorously. Be critical — if a section is weak or you are unsure of feasibility, score it accordingly.
+#### Scoring Rubrics
 
-Score using the **agency-specific rubric**:
-
-#### EU — Horizon Europe / ERC / MSCA (scored 0-5 per criterion)
+**EU — Horizon Europe / ERC / MSCA (scored 0-5 per criterion)**
 
 | Score | Meaning |
 |-------|---------|
@@ -52,35 +45,114 @@ Score using the **agency-specific rubric**:
 | 4 | Very good — addressed very well with negligible shortcomings |
 | 5 | Excellent — successfully addresses all aspects, any shortcomings are minor |
 
-**Horizon Europe (RIA/IA)** criteria: Excellence (objectives, methodology, ambition), Impact (expected outcomes, dissemination, exploitation), Implementation (work plan, consortium, management).
+**Romania — UEFISCDI (scored 1-5 per criterion)**
 
-**ERC** criteria: Groundbreaking nature, Methodology, PI track record.
+| Score | Meaning |
+|-------|---------|
+| 1 | Poor — does not meet expectations |
+| 2 | Below average — significant gaps |
+| 3 | Average — adequate with weaknesses |
+| 4 | Good — strong with minor weaknesses |
+| 5 | Excellent — outstanding quality |
 
-**MSCA** criteria: Excellence (50%), Impact (30%), Implementation (20%).
+**Romania — PNRR (threshold-based, scored 1-5)**
 
-#### Romania — UEFISCDI (scored 1-5 per criterion)
+#### Persona 1: The Scientific Reviewer
 
-Criteria: Scientific quality, Methodology, Feasibility, PI capability, Expected impact.
+Launch as Agent subagent with this prompt:
 
-#### Romania — PNRR (threshold-based)
+> You are a senior researcher reviewing a grant proposal submitted to [agency]. Focus on **scientific and methodological quality**.
+>
+> Evaluate:
+> - **Novelty**: Does the proposal challenge existing paradigms or offer genuinely new insights?
+> - **Methodology**: Is the research design rigorous, appropriate, and reproducible?
+> - **Preliminary data**: Is there sufficient evidence of feasibility?
+> - **Hypothesis quality**: Are hypotheses specific, falsifiable, and grounded in literature?
+> - **Statistical plan**: Are proposed analyses appropriate for the research questions?
+> - **Alternative approaches**: Are contingency plans provided if primary approaches fail?
+>
+> Score each agency criterion using the rubric. Provide strengths, weaknesses, and specific suggestions for each.
+>
+> Output JSON: `{"persona": "scientific_reviewer", "scores": {"criterion": score, ...}, "overall_assessment": "fund/fund_with_revisions/do_not_fund", "confidence": 1-5, "strengths": [...], "weaknesses": [...], "suggestions": [...]}`
 
-Criteria: Relevance to PNRR objectives, Technical quality, Sustainability, Budget efficiency.
+Provide the full proposal text and agency criteria to the subagent.
 
-For each criterion, provide:
-- Numeric score
-- Key strengths supporting the score
-- Key weaknesses reducing the score
-- Specific suggestions for improvement
+#### Persona 2: The Program Officer
 
-Also provide:
-- Overall assessment (fund / fund with revisions / do not fund)
-- Top 3 strengths across all criteria
-- Top 3 weaknesses across all criteria
-- Priority actions for improvement
+Launch as Agent subagent in parallel:
 
-Save the review to `<proposal_dir>/review/claude_review.json`.
+> You are a program officer at [agency] evaluating whether this proposal aligns with the agency's mission and strategic priorities.
+>
+> Evaluate:
+> - **Significance**: Does this address an important problem? Is the timing right?
+> - **Impact pathway**: Is the path from research to real-world impact clear and credible?
+> - **Dissemination & exploitation**: Are plans for sharing results concrete and appropriate?
+> - **Broader value**: Does this benefit society, train researchers, build infrastructure?
+> - **Portfolio fit**: Does this fill a gap or duplicate existing funded work? (Use landscape data if available at `<proposal_dir>/landscape/competitive_brief.md`)
+> - **Budget proportionality**: Is the requested funding proportional to the expected impact?
+>
+> Score each agency criterion using the rubric. Provide strengths, weaknesses, and specific suggestions for each.
+>
+> Output JSON: `{"persona": "program_officer", "scores": {"criterion": score, ...}, "overall_assessment": "fund/fund_with_revisions/do_not_fund", "confidence": 1-5, "strengths": [...], "weaknesses": [...], "suggestions": [...]}`
 
-### 3. Scientific Evidence Assessment (Optional Enhancement)
+#### Persona 3: The Feasibility Assessor
+
+Launch as Agent subagent in parallel:
+
+> You are an experienced evaluator assessing whether this proposal is realistic and achievable.
+>
+> Evaluate:
+> - **PI capability**: Does the PI have the track record, expertise, and time commitment?
+> - **Team composition**: Are all necessary skills represented? Any critical gaps?
+> - **Timeline**: Are milestones realistic given the scope? Are dependencies identified?
+> - **Budget**: Is the budget justified line-by-line? Is it proportional to the work?
+> - **Risk management**: Are key risks identified with credible mitigation strategies?
+> - **Institutional support**: Are facilities and infrastructure adequate?
+>
+> Read the budget at `<proposal_dir>/budget/budget.md` and risk assessment at `<proposal_dir>/sections/risk_mitigation.md` if they exist.
+>
+> Score each agency criterion using the rubric. Provide strengths, weaknesses, and specific suggestions for each.
+>
+> Output JSON: `{"persona": "feasibility_assessor", "scores": {"criterion": score, ...}, "overall_assessment": "fund/fund_with_revisions/do_not_fund", "confidence": 1-5, "strengths": [...], "weaknesses": [...], "suggestions": [...]}`
+
+#### Wait for all 3 subagents to complete, then collect their JSON outputs.
+
+### 3. Claude Panel Synthesis
+
+After all 3 personas complete, synthesize their reviews:
+
+1. **Find consensus**: Identify points where all three reviewers agree (strongest signals)
+2. **Analyze disagreements**: Where reviewers diverge, determine which perspective is better supported by the proposal text
+3. **Compute weighted scores**: For each criterion, calculate a confidence-weighted average:
+   ```
+   weighted_score = sum(score_i * confidence_i) / sum(confidence_i)
+   ```
+4. **Determine recommendation**: Map the weighted overall score to a funding decision:
+   - EU: Average >= 4.0 → fund; 3.0-3.9 → fund with revisions; < 3.0 → do not fund
+   - UEFISCDI: Average >= 4.0 → fund; 3.0-3.9 → fund with revisions; < 3.0 → do not fund
+5. **Rank priority actions**: Order improvement suggestions by potential impact on scores
+
+Save the full Claude panel review to `<proposal_dir>/review/claude_review.json`:
+
+```json
+{
+  "panel": {
+    "scientific_reviewer": { "scores": {}, "confidence": 4, "strengths": [], "weaknesses": [], "suggestions": [] },
+    "program_officer": { "scores": {}, "confidence": 4, "strengths": [], "weaknesses": [], "suggestions": [] },
+    "feasibility_assessor": { "scores": {}, "confidence": 3, "strengths": [], "weaknesses": [], "suggestions": [] }
+  },
+  "synthesis": {
+    "weighted_scores": { "criterion": 3.8, ... },
+    "consensus_strengths": ["..."],
+    "consensus_weaknesses": ["..."],
+    "disagreements": ["..."],
+    "recommendation": "fund_with_revisions",
+    "priority_actions": ["..."]
+  }
+}
+```
+
+### 4. Scientific Evidence Assessment (Optional Enhancement)
 
 **Skip this step if** `--no-scientific-skills` is set.
 
@@ -118,7 +190,7 @@ Provide the proposal text and request evaluation of:
 
 Save to `<proposal_dir>/review/evidence_assessment.md`.
 
-### 4. Codex Panel Review (Optional Enhancement)
+### 5. Codex Panel Review (Optional Enhancement)
 
 **Skip this step if** `--no-codex` is set.
 
@@ -144,68 +216,85 @@ except: print('enabled=auto panel=true')
 ```
 If `enabled` is `false`, skip this step.
 
-Invoke the Codex grant review:
+Invoke the Codex grant review (GPT-5.4 panel with 3 different personas + Panel Chair synthesis):
 
 ```
 /codex:grant-review final/proposal.md --docs sections/ --panel --agency <agency> --wait
 ```
 
-If `panel` is `false`, omit `--panel`:
+If `panel` config is `false`, omit `--panel`:
 ```
 /codex:grant-review final/proposal.md --docs sections/ --agency <agency> --wait
 ```
 
 Save the Codex output to `<proposal_dir>/review/codex_review.md`.
 
-### 5. Merge Reviews
+### 6. Merge All Reviews
 
-If both Claude and Codex reviews exist, generate a merged review at `<proposal_dir>/review/merged_review.json`:
+Generate a unified assessment at `<proposal_dir>/review/merged_review.json`:
 
 ```json
 {
-  "claude_review": {
-    "scores": {},
-    "overall": "<fund / fund with revisions / do not fund>",
-    "key_strengths": ["..."],
-    "key_weaknesses": ["..."]
+  "claude_panel": {
+    "weighted_scores": {},
+    "recommendation": "fund_with_revisions",
+    "consensus_strengths": ["..."],
+    "consensus_weaknesses": ["..."],
+    "individual_reviewers": {
+      "scientific_reviewer": { "recommendation": "...", "confidence": 4 },
+      "program_officer": { "recommendation": "...", "confidence": 4 },
+      "feasibility_assessor": { "recommendation": "...", "confidence": 3 }
+    }
   },
-  "codex_review": {
-    "recommendation": "<accept/minor-revision/major-revision/reject>",
+  "codex_panel": {
+    "recommendation": "...",
     "aggregated_scores": {},
     "key_strengths": ["..."],
     "key_weaknesses": ["..."]
   },
-  "consensus": ["Points both reviews agree on..."],
-  "disagreements": ["Points where reviews diverge..."],
-  "combined_recommendation": "<overall assessment considering both reviews>",
-  "priority_actions": ["Ranked list of revisions to make..."]
+  "evidence_assessment": {
+    "grade": "Moderate",
+    "key_concerns": ["..."]
+  },
+  "cross_panel_analysis": {
+    "agreements": ["Points where BOTH panels agree — strongest signals..."],
+    "claude_only_concerns": ["Issues only Claude panel raised..."],
+    "codex_only_concerns": ["Issues only Codex panel raised..."],
+    "score_comparison": { "criterion": { "claude": 3.8, "codex": 4.0 }, ... }
+  },
+  "final_recommendation": "fund_with_revisions",
+  "priority_actions": ["Ranked by cross-panel agreement and impact on scores..."]
 }
 ```
 
-If only the Claude review exists, the merged review contains only the Claude section with its priority actions.
+If only the Claude panel ran (no Codex), `codex_panel` and `cross_panel_analysis` are omitted — the Claude panel synthesis stands as the final recommendation.
 
-### 6. Present Results
+If only the Claude panel ran (no evidence assessment), `evidence_assessment` is omitted.
+
+### 7. Present Results
 
 **Human checkpoint**: Present the PI with a clear summary:
 
-1. **Scores**: Table of criterion scores (Claude + Codex if available)
-2. **Strengths**: Top 3-5 strengths across both reviews
-3. **Weaknesses**: Top 3-5 weaknesses, ranked by severity
-4. **Evidence quality**: GRADE assessment (if scientific-skills was used)
-5. **Priority actions**: Ordered list of revisions that would most improve the score
-6. **Recommendation**: Combined fund/revise/reject assessment
+1. **Score comparison table**: All criteria with Claude panel scores (and Codex if available)
+2. **Cross-panel agreements**: Issues both AI models flagged — these are the most credible findings
+3. **Strengths**: Top 3-5 consensus strengths
+4. **Weaknesses**: Top 3-5 weaknesses, ranked by how many reviewers flagged them
+5. **Evidence quality**: GRADE assessment (if scientific-skills was used)
+6. **Priority actions**: Ordered list of revisions that would most improve the score
+7. **Final recommendation**: Combined fund/revise/reject assessment
 
 Ask the PI: "Would you like to proceed to revision to address the identified weaknesses?"
 
-### 7. Update State
+### 8. Update State
 
 ```bash
 uv run grant-writer-state update <proposal_dir> --phase review --status complete
 ```
 
 Report:
-- Claude review scores (per criterion)
-- Codex review scores (if available)
-- Combined recommendation
+- Claude panel scores (3 reviewers + weighted synthesis)
+- Codex panel scores (if available)
+- Cross-panel analysis (if both panels ran)
+- Final recommendation
 - Number of priority actions identified
 - Paths to all review files
