@@ -30,16 +30,27 @@ echo "[2/4] Adding marketplaces..."
 claude plugin marketplace add stamate/grant-writer-skills 2>/dev/null || true
 claude plugin marketplace add stamate/codex-plugin-cc 2>/dev/null || true
 claude plugin marketplace add K-Dense-AI/claude-scientific-skills 2>/dev/null || true
+claude plugin marketplace add K-Dense-AI/claude-scientific-writer 2>/dev/null || true
+claude plugin marketplace add anthropics/claude-plugins-official 2>/dev/null || true
 claude plugin marketplace update grant-writer-skills 2>/dev/null || true
 claude plugin marketplace update stm-codex 2>/dev/null || true
 claude plugin marketplace update claude-scientific-skills 2>/dev/null || true
+claude plugin marketplace update claude-scientific-writer 2>/dev/null || true
+claude plugin marketplace update claude-plugins-official 2>/dev/null || true
 echo "  OK"
 
 # 4. Install plugins at project scope
 echo "[3/4] Installing plugins..."
+# Core: grant writer pipeline
 claude plugin install grant-writer@grant-writer-skills --scope project 2>/dev/null || true
+# Codex: multi-persona grant review with agency calibration
 claude plugin install codex@stm-codex --scope project 2>/dev/null || true
+# Scientific skills: 134 research skills (literature, databases, visualization, critical thinking)
 claude plugin install scientific-skills@claude-scientific-skills --scope project 2>/dev/null || true
+# Scientific writer: enhanced writing, image generation, schematics, Paper2Web
+claude plugin install claude-scientific-writer@claude-scientific-writer --scope project 2>/dev/null || true
+# Superpowers: brainstorming, planning, structured workflows
+claude plugin install superpowers@claude-plugins-official --scope project 2>/dev/null || true
 echo "  OK"
 
 # 5. Create CLAUDE.md if it doesn't exist
