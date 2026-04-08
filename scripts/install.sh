@@ -30,12 +30,10 @@ echo "[2/4] Adding marketplaces..."
 claude plugin marketplace add stamate/grant-writer-skills 2>/dev/null || true
 claude plugin marketplace add stamate/codex-plugin-cc 2>/dev/null || true
 claude plugin marketplace add K-Dense-AI/claude-scientific-skills 2>/dev/null || true
-claude plugin marketplace add K-Dense-AI/claude-scientific-writer 2>/dev/null || true
 claude plugin marketplace add jarrodwatts/claude-hud 2>/dev/null || true
 claude plugin marketplace update grant-writer-skills 2>/dev/null || true
 claude plugin marketplace update stm-codex 2>/dev/null || true
 claude plugin marketplace update claude-scientific-skills 2>/dev/null || true
-claude plugin marketplace update claude-scientific-writer 2>/dev/null || true
 claude plugin marketplace update claude-hud 2>/dev/null || true
 echo "  OK"
 
@@ -47,8 +45,6 @@ claude plugin install grant-writer@grant-writer-skills --scope project 2>/dev/nu
 claude plugin install codex@stm-codex --scope project 2>/dev/null || true
 # Scientific skills: 134 research skills (literature, databases, visualization, critical thinking)
 claude plugin install scientific-skills@claude-scientific-skills --scope project 2>/dev/null || true
-# Scientific writer: enhanced writing, image generation, schematics, Paper2Web
-claude plugin install claude-scientific-writer@claude-scientific-writer --scope project 2>/dev/null || true
 # Claude HUD: status line display
 claude plugin install claude-hud@claude-hud --scope project 2>/dev/null || true
 echo "  OK"
