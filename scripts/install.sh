@@ -18,7 +18,7 @@ for cmd in uv claude; do
 done
 
 # 2. Create .venv and install Python package + all dependencies
-echo "[1/4] Creating .venv and installing Python tools..."
+echo "[1/5] Creating .venv and installing Python tools..."
 uv venv --quiet 2>/dev/null || true
 uv pip install "git+${REPO}" --quiet
 echo "  .venv created with: requests, backoff, pymupdf4llm, pyyaml, rich"
@@ -26,7 +26,7 @@ echo "  CLI tools: grant-writer-verify, grant-writer-state, grant-writer-config,
 echo "  OK"
 
 # 3. Add and update marketplaces (update ensures latest version is cached)
-echo "[2/4] Adding marketplaces..."
+echo "[2/5] Adding marketplaces..."
 claude plugin marketplace add stamate/grant-writer-skills 2>/dev/null || true
 claude plugin marketplace add stamate/codex-plugin-cc 2>/dev/null || true
 claude plugin marketplace add K-Dense-AI/claude-scientific-skills 2>/dev/null || true
@@ -38,7 +38,7 @@ claude plugin marketplace update claude-hud 2>/dev/null || true
 echo "  OK"
 
 # 4. Install plugins at project scope
-echo "[3/4] Installing plugins..."
+echo "[3/5] Installing plugins..."
 # Core: grant writer pipeline
 claude plugin install grant-writer@grant-writer-skills --scope project 2>/dev/null || true
 # Codex: multi-persona grant review with agency calibration
@@ -49,8 +49,13 @@ claude plugin install scientific-skills@claude-scientific-skills --scope project
 claude plugin install claude-hud@claude-hud --scope project 2>/dev/null || true
 echo "  OK"
 
-# 5. Create CLAUDE.md if it doesn't exist
-echo "[4/4] Creating CLAUDE.md..."
+# 5. Setup Claude HUD (status line)
+echo "[4/5] Setting up Claude HUD..."
+claude '/claude-hud:setup' 2>/dev/null || true
+echo "  OK"
+
+# 6. Create CLAUDE.md if it doesn't exist
+echo "[5/5] Creating CLAUDE.md..."
 if [ ! -f CLAUDE.md ]; then
     cat > CLAUDE.md << 'CLAUDEMD'
 # Grant Writer Skills
