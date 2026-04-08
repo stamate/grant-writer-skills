@@ -14,6 +14,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+import yaml
+
 
 # ── Phase pipeline ──────────────────────────────────────────────────────────
 
@@ -109,11 +111,23 @@ def init_proposal(
     state = create_state(agency, mechanism, language)
     save_state(proposal_dir, state)
 
-    # Copy config if provided
+    # Write config — merge user config (if provided) with defaults
+    default_cfg_path = Path(__file__).resolve().parent.parent / "templates" / "grant_config.yaml"
+    cfg_data: dict = {}
+    if default_cfg_path.exists():
+        cfg_data = yaml.safe_load(default_cfg_path.read_text()) or {}
     if config_path:
         src = Path(config_path)
         if src.exists():
-            shutil.copy2(src, proposal_dir / "config.yaml")
+            user_cfg = yaml.safe_load(src.read_text()) or {}
+            cfg_data.update(user_cfg)
+    # Always set agency/mechanism/language from the init arguments
+    cfg_data["agency"] = agency
+    cfg_data["mechanism"] = mechanism
+    cfg_data["language"] = language
+    (proposal_dir / "config.yaml").write_text(
+        yaml.dump(cfg_data, default_flow_style=False, sort_keys=False)
+    )
 
     print(str(proposal_dir))
     return str(proposal_dir)

@@ -532,6 +532,39 @@ def _format_report(report: dict) -> str:
     return "\n".join(lines)
 
 
+def _detect_agency(proposal_dir: str) -> Optional[str]:
+    """Auto-detect agency key from proposal config.yaml or state.json."""
+    pdir = Path(proposal_dir)
+    # Try config.yaml first
+    cfg_path = pdir / "config.yaml"
+    if cfg_path.exists():
+        try:
+            import yaml
+            cfg = yaml.safe_load(cfg_path.read_text()) or {}
+            agency = cfg.get("agency", "")
+            mechanism = cfg.get("mechanism", "")
+            if agency and mechanism:
+                return f"{agency}_{mechanism}"
+            if agency:
+                return agency
+        except Exception:
+            pass
+    # Fall back to state.json
+    state_path = pdir / "state.json"
+    if state_path.exists():
+        try:
+            state = json.loads(state_path.read_text())
+            agency = state.get("agency", "")
+            mechanism = state.get("mechanism", "")
+            if agency and mechanism:
+                return f"{agency}_{mechanism}"
+            if agency:
+                return agency
+        except Exception:
+            pass
+    return None
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="Compliance checker for grant proposals.",
@@ -543,22 +576,30 @@ def main(argv=None):
     sp_check.add_argument("proposal_dir", help="Path to proposal directory")
     sp_check.add_argument(
         "--agency",
-        default="horizon_ria",
-        help="Agency key (e.g. horizon_ria, erc, uefiscdi_pce)",
+        default=None,
+        help="Agency key (e.g. horizon_ria, erc, uefiscdi_pce). Auto-detected from proposal config if omitted.",
     )
     sp_check.add_argument("--json", action="store_true", dest="json_output", help="Output JSON instead of text")
 
     # word-counts
     sp_wc = sub.add_parser("word-counts", help="Check word counts per section")
     sp_wc.add_argument("proposal_dir", help="Path to proposal directory")
-    sp_wc.add_argument("--agency", default="horizon_ria", help="Agency key")
+    sp_wc.add_argument("--agency", default=None, help="Agency key (auto-detected if omitted)")
 
     # budget-check
     sp_budget = sub.add_parser("budget-check", help="Validate budget against caps")
     sp_budget.add_argument("proposal_dir", help="Path to proposal directory")
-    sp_budget.add_argument("--agency", default="horizon_ria", help="Agency key")
+    sp_budget.add_argument("--agency", default=None, help="Agency key (auto-detected if omitted)")
 
     args = parser.parse_args(argv)
+
+    # Auto-detect agency from proposal config.yaml or state.json if not provided
+    if hasattr(args, "agency") and args.agency is None and hasattr(args, "proposal_dir"):
+        agency_key = _detect_agency(args.proposal_dir)
+        if agency_key is None:
+            print("Error: Cannot detect agency. Provide --agency or ensure proposal has config.yaml/state.json.", file=sys.stderr)
+            sys.exit(1)
+        args.agency = agency_key
 
     if args.command == "check":
         report = run_all_checks(args.proposal_dir, args.agency)
