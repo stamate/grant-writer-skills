@@ -31,29 +31,27 @@ This project provides a complete grant proposal writing pipeline as Claude Code 
 
 ## Tool Usage
 
-When running from a cloned repo, tools are invoked via `uv run python3 tools/<module>.py`. When installed as a plugin, skills discover the plugin root first and use absolute paths (`"$GRANTWRITER_ROOT/tools/<module>.py"`). See any skill's "Locate Plugin Root" step for the discovery pattern.
-
-Tool reference (from project root):
+This project uses `uv` with a `.venv` in the project directory. All CLI tools are installed as entry points via `[project.scripts]` in `pyproject.toml`. Use `uv run` to invoke them. If `.venv` doesn't exist, run `uv sync` first.
 
 ```bash
-uv run python3 tools/verify_setup.py                                        # Verify all prerequisites
-uv run python3 tools/agency_requirements.py list                             # List all agencies
-uv run python3 tools/agency_requirements.py info horizon ria                 # Show agency requirements
-uv run python3 tools/agency_requirements.py sections erc starting            # Show section limits
-uv run python3 tools/agency_requirements.py budget horizon ria               # Show budget rules
-uv run python3 tools/agency_requirements.py review-criteria uefiscdi pce     # Show scoring
-uv run python3 tools/funded_grants.py search "query" --agency horizon --limit 20  # Search funded grants
-uv run python3 tools/funded_grants.py pi-grants "Name" --agency horizon      # PI's previous grants
-uv run python3 tools/compliance_checker.py check <proposal_dir>              # Full compliance check
-uv run python3 tools/compliance_checker.py word-counts <proposal_dir>        # Word counts per section
-uv run python3 tools/compliance_checker.py budget-check <proposal_dir>       # Budget validation
-uv run python3 tools/budget_calculator.py calculate <budget_input.yaml>      # Calculate budget
-uv run python3 tools/budget_calculator.py format <input.yaml> --style horizon_wp  # Format for Horizon
-uv run python3 tools/state_manager.py init --agency horizon --mechanism ria  # Init proposal state
-uv run python3 tools/state_manager.py status <proposal_dir>                  # Check proposal state
-uv run python3 tools/state_manager.py update <dir> --phase aims --status complete  # Update phase
-uv run python3 tools/config.py --config <path>                               # Load/display config
-uv run python3 tools/pdf_reader.py <file.pdf>                                # Extract PDF text
+uv run grant-writer-verify                                           # Verify all prerequisites
+uv run grant-writer-agency list                                      # List all agencies
+uv run grant-writer-agency info horizon_ria                          # Show agency requirements
+uv run grant-writer-agency sections erc                              # Show section limits
+uv run grant-writer-agency budget horizon_ria                        # Show budget rules
+uv run grant-writer-agency review-criteria uefiscdi_pce              # Show scoring
+uv run grant-writer-grants search "query" --agency horizon --limit 20  # Search funded grants
+uv run grant-writer-grants pi-grants "Name" --agency horizon         # PI's previous grants
+uv run grant-writer-compliance check <proposal_dir>                  # Full compliance check
+uv run grant-writer-compliance word-counts <proposal_dir>            # Word counts per section
+uv run grant-writer-compliance budget-check <proposal_dir>           # Budget validation
+uv run grant-writer-budget calculate <budget_input.yaml>             # Calculate budget
+uv run grant-writer-budget format <input.yaml> --style horizon_wp    # Format for Horizon
+uv run grant-writer-state init --agency horizon --mechanism ria      # Init proposal state
+uv run grant-writer-state status <proposal_dir>                      # Check proposal state
+uv run grant-writer-state update <dir> --phase aims --status complete  # Update phase
+uv run grant-writer-config --config <path>                           # Load/display config
+uv run grant-writer-pdf <file.pdf>                                   # Extract PDF text
 ```
 
 ## Environment

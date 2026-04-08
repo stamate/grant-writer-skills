@@ -21,9 +21,6 @@ Parse from the user's message.
 ### 0. Locate Plugin Root
 
 ```bash
-if [ -f "tools/verify_setup.py" ]; then GRANTWRITER_ROOT="$(pwd)"
-else GRANTWRITER_ROOT=$(find ".claude/plugins" "$HOME/.claude/plugins" -maxdepth 8 -name "verify_setup.py" -path "*grant-writer*" 2>/dev/null | head -1 | xargs dirname | xargs dirname); fi
-export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could not find grant-writer-skills plugin root."; fi; echo "Plugin root: $GRANTWRITER_ROOT"
 ```
 
 ### 1. Load Context
@@ -39,7 +36,7 @@ Read from the proposal directory:
 
 Load agency template and section order:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" sections <agency> <mechanism>
+uv run grant-writer-agency sections <agency> <mechanism>
 ```
 
 Read the citation style from `agency.json`:
@@ -88,10 +85,11 @@ For each section:
 
 #### a. Load Template
 
-Read the section template from the agency's template directory:
+Load the section template. Use the agency info to find templates:
 ```bash
-cat "$GRANTWRITER_ROOT/templates/agencies/<agency_dir>/<section_name>.md"
+uv run grant-writer-agency info <agency_dir>
 ```
+The tool prints the agency's template directory path. Read the section template `.md` from that directory.
 
 #### b. Write Content
 
@@ -142,14 +140,14 @@ Save to `sections/<section_name>.md`.
 
 Update state with section completion:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase proposal_writing --sections-done <section_name>
+uv run grant-writer-state update <proposal_dir> --phase proposal_writing --sections-done <section_name>
 ```
 
 ### 4. Verify Word Counts
 
 After all sections are written, verify word counts:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" word-counts <proposal_dir>
+uv run grant-writer-compliance word-counts <proposal_dir>
 ```
 
 If any section exceeds its limit, revise to fit within the constraint. Prioritize cutting redundancy over removing content.

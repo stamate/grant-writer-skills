@@ -19,9 +19,6 @@ Parse from the user's message.
 ### 0. Locate Plugin Root
 
 ```bash
-if [ -f "tools/verify_setup.py" ]; then GRANTWRITER_ROOT="$(pwd)"
-else GRANTWRITER_ROOT=$(find ".claude/plugins" "$HOME/.claude/plugins" -maxdepth 8 -name "verify_setup.py" -path "*grant-writer*" 2>/dev/null | head -1 | xargs dirname | xargs dirname); fi
-export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could not find grant-writer-skills plugin root."; fi; echo "Plugin root: $GRANTWRITER_ROOT"
 ```
 
 ### 1. Load Budget Model
@@ -29,7 +26,7 @@ export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could 
 Read the agency configuration to determine the budget model:
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" budget <agency> <mechanism>
+uv run grant-writer-agency budget <agency> <mechanism>
 ```
 
 Also read `<proposal_dir>/config.yaml` for budget overrides (indirect rate, currency).
@@ -64,7 +61,7 @@ Save the PI's raw inputs to `<proposal_dir>/budget/budget_input.yaml`.
 Run the budget calculator with the PI's inputs:
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/budget_calculator.py" calculate <proposal_dir>/budget/budget_input.yaml
+uv run grant-writer-budget calculate <proposal_dir>/budget/budget_input.yaml
 ```
 
 This produces:
@@ -78,7 +75,7 @@ This produces:
 Generate the formatted budget tables:
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/budget_calculator.py" format <proposal_dir>/budget/budget_input.yaml --style <agency_style>
+uv run grant-writer-budget format <proposal_dir>/budget/budget_input.yaml --style <agency_style>
 ```
 
 Where `<agency_style>` is `horizon_wp` for EU or `uefiscdi` for Romania.
@@ -110,7 +107,7 @@ Ask the PI to confirm line items or request adjustments. If adjustments are need
 ### 7. Update State
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase budget --status complete
+uv run grant-writer-state update <proposal_dir> --phase budget --status complete
 ```
 
 Report:

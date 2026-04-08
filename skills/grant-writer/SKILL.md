@@ -49,32 +49,26 @@ Parse from the user's message. If neither `--agency` nor `--foa` is provided, as
 
 ### Phase 0: Setup
 
-0. **Locate plugin root** (required before any tool invocations):
-   ```bash
-   if [ -f "tools/verify_setup.py" ]; then
-       GRANTWRITER_ROOT="$(pwd)"
-   else
-       GRANTWRITER_ROOT=$(find ".claude/plugins" "$HOME/.claude/plugins" -maxdepth 8 -name "verify_setup.py" -path "*grant-writer*" 2>/dev/null | head -1 | xargs dirname | xargs dirname)
-   fi
-   export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could not find grant-writer-skills plugin root."; fi; echo "Grant Writer root: $GRANTWRITER_ROOT"
-   ```
-   **All subsequent `tools/` references must use `"$GRANTWRITER_ROOT/tools/"`** instead of bare `tools/`. Similarly, `templates/` becomes `"$GRANTWRITER_ROOT/templates/"`.
+> **Runtime**: This project uses `uv` with a `.venv` in the **project directory**. All CLI tools (`grant-writer-verify`, `grant-writer-state`, etc.) are installed as entry points. Use `uv run` to invoke them. If `.venv` doesn't exist or tools are missing, tell the user to run:
+> ```bash
+> uv sync
+> ```
 
 1. **Verify environment**:
    ```bash
-   uv run python3 "$GRANTWRITER_ROOT/tools/verify_setup.py"
+   uv run grant-writer-verify
    ```
    If this fails (missing dependencies, wrong Python version), **stop and guide the user** through fixing the issues.
 
 2. **Load configuration**:
    ```bash
-   uv run python3 "$GRANTWRITER_ROOT/tools/config.py" --config <config_path>
+   uv run grant-writer-config --config <config_path>
    ```
-   If `--config` was not provided, use `"$GRANTWRITER_ROOT/templates/grant_config.yaml"`.
+   If `--config` was not provided, use the default config (built into the tool).
 
 3. **Initialize proposal directory** (skip if `--proposal-dir` provided):
    ```bash
-   uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" init --agency <agency> --mechanism <mechanism> --config <config_path>
+   uv run grant-writer-state init --agency <agency> --mechanism <mechanism> --config <config_path>
    ```
    This creates the proposal directory structure with `state.json` and `config.yaml`.
 
@@ -130,7 +124,7 @@ This parses the funding opportunity and produces `foa_requirements.json`.
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase foa_analysis --status complete
+uv run grant-writer-state update <proposal_dir> --phase foa_analysis --status complete
 ```
 
 ### Phase 1.5: Competitive Landscape
@@ -143,7 +137,7 @@ Add `--no-scientific-skills` if `SCIENTIFIC_SKILLS_ENABLED` is false.
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase landscape --status complete
+uv run grant-writer-state update <proposal_dir> --phase landscape --status complete
 ```
 
 ### Phase 2: Aims / Objectives
@@ -157,7 +151,7 @@ This runs an iterative refinement loop with human checkpoints until the PI appro
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase aims --status complete
+uv run grant-writer-state update <proposal_dir> --phase aims --status complete
 ```
 
 ### Phase 3: Literature Review
@@ -170,7 +164,7 @@ Add `--no-scientific-skills` if `SCIENTIFIC_SKILLS_ENABLED` is false.
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase literature --status complete
+uv run grant-writer-state update <proposal_dir> --phase literature --status complete
 ```
 
 ### Phase 4: Preliminary Data
@@ -182,7 +176,7 @@ Invoke the preliminary data skill:
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase preliminary_data --status complete
+uv run grant-writer-state update <proposal_dir> --phase preliminary_data --status complete
 ```
 
 ### Phase 5: Proposal Writing
@@ -195,7 +189,7 @@ Add `--no-scientific-skills` if `SCIENTIFIC_SKILLS_ENABLED` is false.
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase proposal_writing --status complete
+uv run grant-writer-state update <proposal_dir> --phase proposal_writing --status complete
 ```
 
 ### Phase 5.5: Risk & Feasibility
@@ -207,7 +201,7 @@ Invoke the risk analysis skill:
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase risk_analysis --status complete
+uv run grant-writer-state update <proposal_dir> --phase risk_analysis --status complete
 ```
 
 ### Phase 6: Budget
@@ -219,7 +213,7 @@ Invoke the budget skill:
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase budget --status complete
+uv run grant-writer-state update <proposal_dir> --phase budget --status complete
 ```
 
 ### Phase 7: Supporting Documents
@@ -231,7 +225,7 @@ Invoke the supporting documents skill:
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase supporting_docs --status complete
+uv run grant-writer-state update <proposal_dir> --phase supporting_docs --status complete
 ```
 
 ### Phase 8: Compliance Check
@@ -247,7 +241,7 @@ Non-critical **warnings** (word count close to limit, missing optional sections)
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase compliance --status complete
+uv run grant-writer-state update <proposal_dir> --phase compliance --status complete
 ```
 
 ### Phase 8.5: Assembly
@@ -256,21 +250,21 @@ Assemble the final proposal document:
 
 1. Read section order from `agency.json`:
    ```bash
-   uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" sections <agency> <mechanism>
+   uv run grant-writer-agency sections <agency> <mechanism>
    ```
 
 2. Concatenate sections with proper Markdown headers (# for top-level, ## for sub-sections). Prepend project summary. Insert figures with proper Markdown references. Append bibliography.
 
 3. Validate total word count:
    ```bash
-   uv run python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" word-counts <proposal_dir>
+   uv run grant-writer-compliance word-counts <proposal_dir>
    ```
 
 4. Save assembled document to `final/proposal.md`.
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase assembly --status complete
+uv run grant-writer-state update <proposal_dir> --phase assembly --status complete
 ```
 
 ### Phase 9: Review
@@ -286,7 +280,7 @@ Add `--no-scientific-skills` if `SCIENTIFIC_SKILLS_ENABLED` is false.
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase review --status complete
+uv run grant-writer-state update <proposal_dir> --phase review --status complete
 ```
 
 ### Phase 9.5: Resubmission Analysis
@@ -311,7 +305,7 @@ This addresses review weaknesses, re-runs compliance, re-assembles, and re-revie
 
 Update state:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase revision --status complete
+uv run grant-writer-state update <proposal_dir> --phase revision --status complete
 ```
 
 ## Resume Support
@@ -323,7 +317,7 @@ The pipeline supports resuming at any phase:
 - For partially-complete phases (e.g., `proposal_writing` with `sections_done: ["project_summary", "excellence"]`), resume writing from the next unfinished section
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" status <proposal_dir>
+uv run grant-writer-state status <proposal_dir>
 ```
 
 ## Error Handling

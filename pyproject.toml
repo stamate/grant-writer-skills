@@ -36,3 +36,19 @@ Repository = "https://github.com/stamate/grant-writer-skills"
 
 [tool.setuptools.packages.find]
 include = ["tools*"]
+
+[tool.setuptools.package-data]
+tools = [
+    "templates/**/*",
+    "templates/*",
+]
+
+[project.scripts]
+grant-writer-verify = "tools.verify_setup:main"
+grant-writer-config = "tools.config:parse_config_args"
+grant-writer-state = "tools.state_manager:main"
+grant-writer-agency = "tools.agency_requirements:main"
+grant-writer-grants = "tools.funded_grants:main"
+grant-writer-budget = "tools.budget_calculator:main"
+grant-writer-compliance = "tools.compliance_checker:main"
+grant-writer-pdf = "tools.pdf_reader:main"

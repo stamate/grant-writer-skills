@@ -19,15 +19,12 @@ Parse from the user's message.
 ### 0. Locate Plugin Root
 
 ```bash
-if [ -f "tools/verify_setup.py" ]; then GRANTWRITER_ROOT="$(pwd)"
-else GRANTWRITER_ROOT=$(find ".claude/plugins" "$HOME/.claude/plugins" -maxdepth 8 -name "verify_setup.py" -path "*grant-writer*" 2>/dev/null | head -1 | xargs dirname | xargs dirname); fi
-export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could not find grant-writer-skills plugin root."; fi; echo "Plugin root: $GRANTWRITER_ROOT"
 ```
 
 ### 1. Load Agency Requirements
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" sections <agency> <mechanism>
+uv run grant-writer-agency sections <agency> <mechanism>
 ```
 
 This returns the required sections, word limits, and formatting rules from `agency.json`.
@@ -35,7 +32,7 @@ This returns the required sections, word limits, and formatting rules from `agen
 ### 2. Run Compliance Checker
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" check <proposal_dir>
+uv run grant-writer-compliance check <proposal_dir>
 ```
 
 The checker validates:
@@ -69,12 +66,12 @@ For each violation, provide a specific fix suggestion (e.g., "Section `excellenc
 
 Check word counts in detail:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" word-counts <proposal_dir>
+uv run grant-writer-compliance word-counts <proposal_dir>
 ```
 
 Check budget specifically:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" budget-check <proposal_dir>
+uv run grant-writer-compliance budget-check <proposal_dir>
 ```
 
 ### 5. Save Compliance Report
@@ -102,7 +99,7 @@ If **all checks pass**:
 ### 7. Update State
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase compliance --status <complete|failed>
+uv run grant-writer-state update <proposal_dir> --phase compliance --status <complete|failed>
 ```
 
 Report:

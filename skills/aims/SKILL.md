@@ -21,9 +21,6 @@ Parse from the user's message.
 ### 0. Locate Plugin Root
 
 ```bash
-if [ -f "tools/verify_setup.py" ]; then GRANTWRITER_ROOT="$(pwd)"
-else GRANTWRITER_ROOT=$(find ".claude/plugins" "$HOME/.claude/plugins" -maxdepth 8 -name "verify_setup.py" -path "*grant-writer*" 2>/dev/null | head -1 | xargs dirname | xargs dirname); fi
-export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could not find grant-writer-skills plugin root."; fi; echo "Plugin root: $GRANTWRITER_ROOT"
 ```
 
 ### 1. Load Context
@@ -36,7 +33,7 @@ Read the following inputs from the proposal directory:
 
 Load agency review criteria:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" review-criteria <agency> <mechanism>
+uv run grant-writer-agency review-criteria <agency> <mechanism>
 ```
 
 ### 2. Generate Initial Objectives
@@ -95,7 +92,7 @@ Save the refined objectives to `sections/objectives.md`.
 
 Also update state with the number of rounds used:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase aims --status complete
+uv run grant-writer-state update <proposal_dir> --phase aims --status complete
 ```
 
 ## EU-Specific Notes

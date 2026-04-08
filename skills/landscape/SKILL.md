@@ -23,9 +23,6 @@ Parse from the user's message.
 ### 0. Locate Plugin Root
 
 ```bash
-if [ -f "tools/verify_setup.py" ]; then GRANTWRITER_ROOT="$(pwd)"
-else GRANTWRITER_ROOT=$(find ".claude/plugins" "$HOME/.claude/plugins" -maxdepth 8 -name "verify_setup.py" -path "*grant-writer*" 2>/dev/null | head -1 | xargs dirname | xargs dirname); fi
-export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could not find grant-writer-skills plugin root."; fi; echo "Plugin root: $GRANTWRITER_ROOT"
 ```
 
 ### 1. Query Funded Grants Databases
@@ -34,12 +31,12 @@ Search for funded projects in the relevant database:
 
 **For EU agencies** (Horizon Europe, ERC, MSCA) — query OpenAIRE:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/funded_grants.py" search "<query>" --agency <agency> --years 2022-2026 --limit 20
+uv run grant-writer-grants search "<query>" --agency <agency> --years 2022-2026 --limit 20
 ```
 
 **For Romanian agencies** (UEFISCDI, PNRR) — query UEFISCDI public results with WebSearch fallback:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/funded_grants.py" search "<query>" --agency uefiscdi --limit 10
+uv run grant-writer-grants search "<query>" --agency uefiscdi --limit 10
 ```
 
 Save raw results to `landscape/funded_grants.json`.
@@ -48,7 +45,7 @@ Save raw results to `landscape/funded_grants.json`.
 
 Search for the PI's existing and previous grants:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/funded_grants.py" pi-grants "<pi_name>" --agency <agency>
+uv run grant-writer-grants pi-grants "<pi_name>" --agency <agency>
 ```
 
 ### 3. Enhanced Search (Optional — claude-scientific-skills)

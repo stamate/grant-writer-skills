@@ -108,7 +108,7 @@ def _split_pages(text: str) -> List[str]:
 
 # ── CLI ──────────────────────────────────────────────────────────────────────
 
-if __name__ == "__main__":
+def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="PDF text extraction for grant documents")
@@ -122,3 +122,7 @@ if __name__ == "__main__":
     else:
         text = extract_text(args.pdf_path, max_pages=args.pages)
         print(text)
+
+
+if __name__ == "__main__":
+    main()

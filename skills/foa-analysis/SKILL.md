@@ -21,16 +21,13 @@ Parse from the user's message.
 ### 0. Locate Plugin Root
 
 ```bash
-if [ -f "tools/verify_setup.py" ]; then GRANTWRITER_ROOT="$(pwd)"
-else GRANTWRITER_ROOT=$(find ".claude/plugins" "$HOME/.claude/plugins" -maxdepth 8 -name "verify_setup.py" -path "*grant-writer*" 2>/dev/null | head -1 | xargs dirname | xargs dirname); fi
-export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could not find grant-writer-skills plugin root."; fi; echo "Plugin root: $GRANTWRITER_ROOT"
 ```
 
 ### 1. Extract FOA Text
 
 If the FOA is a PDF:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/pdf_reader.py" <foa_path>
+uv run grant-writer-pdf <foa_path>
 ```
 
 If the FOA is a URL, use the WebFetch tool to retrieve the page content.
@@ -53,7 +50,7 @@ Parse the FOA text and extract:
 
 Load the known agency template for validation:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" info <agency> <mechanism>
+uv run grant-writer-agency info <agency> <mechanism>
 ```
 
 Compare extracted requirements against the template. Flag any discrepancies — the FOA may have call-specific additions or modifications to the standard template.

@@ -20,9 +20,6 @@ Parse from the user's message.
 ### 0. Locate Plugin Root
 
 ```bash
-if [ -f "tools/verify_setup.py" ]; then GRANTWRITER_ROOT="$(pwd)"
-else GRANTWRITER_ROOT=$(find ".claude/plugins" "$HOME/.claude/plugins" -maxdepth 8 -name "verify_setup.py" -path "*grant-writer*" 2>/dev/null | head -1 | xargs dirname | xargs dirname); fi
-export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could not find grant-writer-skills plugin root."; fi; echo "Plugin root: $GRANTWRITER_ROOT"
 ```
 
 ### 1. Load Review Findings
@@ -60,7 +57,7 @@ For each actionable weakness, revise the corresponding section file in `sections
 #### 3b. Re-run Compliance
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" check <proposal_dir>
+uv run grant-writer-compliance check <proposal_dir>
 ```
 
 If critical violations emerge from the revision (e.g., word count exceeded after adding content), fix them before proceeding.
@@ -76,7 +73,7 @@ Re-assemble `final/proposal.md` from the revised sections:
 6. Validate total word count
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" sections <agency> <mechanism>
+uv run grant-writer-agency sections <agency> <mechanism>
 ```
 
 Save the re-assembled proposal to `<proposal_dir>/final/proposal.md`.
@@ -117,7 +114,7 @@ If the revised proposal scores above the threshold on all criteria, recommend fi
 ### 5. Update State
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase revision --status complete
+uv run grant-writer-state update <proposal_dir> --phase revision --status complete
 ```
 
 Report:

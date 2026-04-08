@@ -20,9 +20,6 @@ Parse from the user's message.
 ### 0. Locate Plugin Root
 
 ```bash
-if [ -f "tools/verify_setup.py" ]; then GRANTWRITER_ROOT="$(pwd)"
-else GRANTWRITER_ROOT=$(find ".claude/plugins" "$HOME/.claude/plugins" -maxdepth 8 -name "verify_setup.py" -path "*grant-writer*" 2>/dev/null | head -1 | xargs dirname | xargs dirname); fi
-export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could not find grant-writer-skills plugin root."; fi; echo "Plugin root: $GRANTWRITER_ROOT"
 ```
 
 ### 1. Extract Reviewer Comments
@@ -30,7 +27,7 @@ export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could 
 Extract text from the evaluation report PDF:
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/pdf_reader.py" <reviews_path>
+uv run grant-writer-pdf <reviews_path>
 ```
 
 Read the extracted text carefully. Identify each individual criticism, comment, and suggestion from the reviewers.
@@ -86,7 +83,7 @@ Ask the PI to:
 ### 6. Update State
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase resubmission --status complete
+uv run grant-writer-state update <proposal_dir> --phase resubmission --status complete
 ```
 
 Report:

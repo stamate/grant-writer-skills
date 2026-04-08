@@ -22,9 +22,6 @@ Parse from the user's message.
 ### 0. Locate Plugin Root
 
 ```bash
-if [ -f "tools/verify_setup.py" ]; then GRANTWRITER_ROOT="$(pwd)"
-else GRANTWRITER_ROOT=$(find ".claude/plugins" "$HOME/.claude/plugins" -maxdepth 8 -name "verify_setup.py" -path "*grant-writer*" 2>/dev/null | head -1 | xargs dirname | xargs dirname); fi
-export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could not find grant-writer-skills plugin root."; fi; echo "Plugin root: $GRANTWRITER_ROOT"
 ```
 
 ### 1. Load Context
@@ -37,7 +34,7 @@ Read from the proposal directory:
 
 Load citation style from agency template:
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" info <agency> <mechanism>
+uv run grant-writer-agency info <agency> <mechanism>
 ```
 
 The `citation_style` field determines formatting: `"numbered"` produces `[1]`, `[2]` style; `"author_year"` produces `(Smith et al., 2024)` style.
@@ -51,7 +48,7 @@ For each search round (up to `--max-rounds`), query S2 with progressively refine
 **Round 3**: Key authors and seminal works in the field
 
 ```bash
-uv run python3 "$GRANTWRITER_ROOT/tools/search.py" "<query>" --limit 15 --json
+uv run grant-writer-search "<query>" --limit 15 --json
 ```
 
 If S2 returns no results or is unavailable, use WebSearch to search `scholar.google.com` and `arxiv.org`.
