@@ -40,6 +40,7 @@ Parse from the user's message. If neither `--agency` nor `--foa` is provided, as
  7.   Supporting Docs    →  CVs, facilities, DMP, ethics, consortium agreement
  8.   Compliance         →  word counts, required sections, structure validation
  8.5  Assembly           →  compile all sections into final/proposal.md
+ 8.7  Fact Check         →  citation verification, claim-source alignment, cross-model check
  9.   Review             →  Claude 3-persona panel + optional Codex panel (dual multi-perspective)
  9.5  Resubmission       →  parse previous reviews, plan revisions (if applicable)
 10.   Revision           →  address weaknesses, re-assemble, re-review
@@ -266,6 +267,19 @@ Update state:
 ```bash
 uv run grant-writer-state update <proposal_dir> --phase assembly --status complete
 ```
+
+### Phase 8.7: Fact Check
+
+Verify factual accuracy before peer review. This catches fabricated citations, misattributed claims, and internal contradictions.
+
+```
+/grant-writer:fact-check --proposal-dir <proposal_dir>
+```
+Add `--no-codex` if `CODEX_ENABLED` is false.
+
+**If critical issues found** (fabricated references, misattributed claims): the fact-check skill blocks progression. Return to the relevant phase (proposal writing or literature) to fix issues, then re-assemble and re-check.
+
+**If only warnings or clean**: proceed to review.
 
 ### Phase 9: Review
 

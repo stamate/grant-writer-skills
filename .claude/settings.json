@@ -52,6 +52,10 @@
       "type": "prompt",
       "path": "skills/codex-review/SKILL.md"
     },
+    "grant-writer:fact-check": {
+      "type": "prompt",
+      "path": "skills/fact-check/SKILL.md"
+    },
     "grant-writer:resubmission": {
       "type": "prompt",
       "path": "skills/resubmission/SKILL.md"

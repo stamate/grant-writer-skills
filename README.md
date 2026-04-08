@@ -179,7 +179,8 @@ One command triggers the full lifecycle:
     Docs
  8. Compliance      -->  word counts, required sections, structure validation
  8.5 Assembly       -->  compile all sections into final/proposal.md
- 9. Review          -->  Claude review + Codex panel (agency-calibrated)
+ 8.7 Fact Check     -->  citation verification, claim-source alignment, cross-model check
+ 9. Review          -->  Claude 3-persona panel + optional Codex panel (dual multi-perspective)
 10. Revision        -->  address weaknesses, re-assemble, re-review
 ```
 
@@ -219,7 +220,8 @@ Human checkpoints at phases 1, 2, 4, 5, 6, 7, and 9 ensure PI control over every
 | Type | Skill | Description |
 |------|-------|-------------|
 | Skill | `/grant-writer:compliance` | Validate structure, word counts, bibliography completeness, budget caps, figure references. |
-| Skill | `/grant-writer:review` | Claude structured review + optional Codex agency-calibrated panel + optional GRADE evidence assessment. |
+| Skill | `/grant-writer:fact-check` | Multi-pass hallucination checker — citation verification, claim-source alignment, cross-model fact check. |
+| Skill | `/grant-writer:review` | Claude 3-persona panel + optional Codex panel (dual multi-perspective) + optional GRADE evidence assessment. |
 | Optional | `/grant-writer:codex-review` | Standalone Codex grant review with 3-persona panel (requires codex-plugin-cc). |
 | Skill | `/grant-writer:resubmission` | Parse previous evaluation summary reports. Generate point-by-point response plan. |
 | Skill | `/grant-writer:revision` | Address review feedback, revise affected sections, re-check compliance, re-review. |

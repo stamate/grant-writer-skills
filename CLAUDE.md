@@ -17,6 +17,7 @@ This project provides a complete grant proposal writing pipeline as Claude Code 
 | `/grant-writer:budget` | Budget preparation (person-months or monthly salary) |
 | `/grant-writer:supporting-docs` | CVs, facilities, DMP, ethics, letters |
 | `/grant-writer:compliance` | Validate structure, word counts, required sections |
+| `/grant-writer:fact-check` | Multi-pass hallucination and factual accuracy checker |
 | `/grant-writer:review` | Claude + optional Codex panel review |
 | `/grant-writer:codex-review` | Standalone Codex grant review |
 | `/grant-writer:resubmission` | Parse previous reviews, plan revisions |

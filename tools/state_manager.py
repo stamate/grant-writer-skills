@@ -32,6 +32,7 @@ PHASE_ORDER = [
     "supporting_docs",
     "compliance",
     "assembly",
+    "fact_check",
     "review",
     "revision",
 ]
