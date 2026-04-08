@@ -533,35 +533,46 @@ def _format_report(report: dict) -> str:
 
 
 def _detect_agency(proposal_dir: str) -> Optional[str]:
-    """Auto-detect agency key from proposal config.yaml or state.json."""
+    """Auto-detect agency key from proposal config.yaml or state.json.
+
+    Tries ``{agency}_{mechanism}`` first (e.g. ``uefiscdi_pce``), then
+    just ``{agency}`` (e.g. ``erc`` when template dir is ``erc/`` not
+    ``erc_starting/``).  Validates that ``load_agency`` can resolve the
+    key before returning it.
+    """
     pdir = Path(proposal_dir)
-    # Try config.yaml first
-    cfg_path = pdir / "config.yaml"
-    if cfg_path.exists():
+    agency = ""
+    mechanism = ""
+
+    # Try config.yaml first, then state.json
+    for filename in ("config.yaml", "state.json"):
+        fpath = pdir / filename
+        if not fpath.exists():
+            continue
         try:
-            import yaml
-            cfg = yaml.safe_load(cfg_path.read_text()) or {}
-            agency = cfg.get("agency", "")
-            mechanism = cfg.get("mechanism", "")
-            if agency and mechanism:
-                return f"{agency}_{mechanism}"
+            if filename.endswith(".yaml"):
+                import yaml
+                data = yaml.safe_load(fpath.read_text()) or {}
+            else:
+                data = json.loads(fpath.read_text())
+            agency = data.get("agency", "")
+            mechanism = data.get("mechanism", "")
             if agency:
-                return agency
+                break
         except Exception:
-            pass
-    # Fall back to state.json
-    state_path = pdir / "state.json"
-    if state_path.exists():
+            continue
+
+    if not agency:
+        return None
+
+    # Try compound key first, then bare agency name
+    for candidate in [f"{agency}_{mechanism}", agency] if mechanism else [agency]:
         try:
-            state = json.loads(state_path.read_text())
-            agency = state.get("agency", "")
-            mechanism = state.get("mechanism", "")
-            if agency and mechanism:
-                return f"{agency}_{mechanism}"
-            if agency:
-                return agency
-        except Exception:
-            pass
+            load_agency(candidate)
+            return candidate
+        except FileNotFoundError:
+            continue
+
     return None
 
 
