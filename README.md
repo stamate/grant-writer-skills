@@ -5,23 +5,25 @@
     <img src="https://img.shields.io/badge/Funding-EU%20|%20Romania-blue?style=flat-square" alt="Funding"/>
     <img src="https://img.shields.io/badge/Output-Markdown-green?style=flat-square" alt="Markdown"/>
     <img src="https://img.shields.io/badge/Python-3.11+-orange?style=flat-square" alt="Python"/>
+    <img src="https://img.shields.io/badge/Skills-17-red?style=flat-square" alt="17 Skills"/>
   </p>
 
 </div>
 
-> Write competitive grant proposals with AI assistance. Full pipeline from FOA analysis to peer review. Targets EU (Horizon Europe, ERC, MSCA) and Romanian (UEFISCDI, PNRR) funding agencies.
+> Write competitive grant proposals with AI assistance. Full pipeline from FOA analysis to peer review with journalism-grade fact checking. Targets EU (Horizon Europe, ERC, MSCA) and Romanian (UEFISCDI, PNRR) funding agencies.
 
 ## Quick Navigation
 
 | Section | What it helps with |
 |---|---|
-| [Why This Project](#why-this-project) | Understand the motivation and design philosophy. |
-| [Supported Agencies](#supported-agencies) | See which funding programs are covered. |
-| [Quick Start](#quick-start) | Install and run your first pipeline. |
-| [Getting Started](#getting-started) | Realistic first-use examples after installation. |
-| [Pipeline Overview](#pipeline-overview) | See the end-to-end flow from FOA to reviewed proposal. |
-| [Skills Reference](#skills-reference) | Browse all available skills and what they do. |
-| [Configuration](#configuration) | Tune aims rounds, literature depth, and review cycles. |
+| [Why This Project](#why-this-project) | Understand the motivation and design philosophy |
+| [Supported Agencies](#supported-agencies) | See which funding programs are covered |
+| [Quick Start](#quick-start) | Install and run your first pipeline |
+| [Getting Started](#getting-started) | Realistic first-use examples after installation |
+| [Pipeline Overview](#pipeline-overview) | See the end-to-end flow from FOA to reviewed proposal |
+| [Skills Reference](#skills-reference) | Browse all 17 skills and what they do |
+| [Configuration](#configuration) | Tune aims rounds, literature depth, and review cycles |
+| [Companion Plugins](#companion-plugins) | Enhanced reviews (Codex) and research tools (scientific skills) |
 
 ## Why This Project
 
@@ -29,53 +31,69 @@ Grant writing is one of the most time-consuming activities in academic research.
 
 This project takes a different approach:
 
-> **Claude Code orchestrates the full proposal lifecycle.** From parsing funding announcements, through competitive landscape analysis, iterative aims refinement, agency-specific section writing, budget preparation, compliance checking, and multi-model peer review. The PI remains in the loop at every decision point.
+> **Claude Code orchestrates the full proposal lifecycle.** From parsing funding announcements, through competitive landscape analysis, iterative aims refinement, agency-specific section writing, budget preparation, compliance checking, fact verification, and multi-model peer review. The PI remains in the loop at every decision point.
 
 | Aspect | Manual Grant Writing | Grant Writer Skills |
 |--------|---------------------|---------------------|
+| Document import | Manually re-enter CV, budget, references | Auto-extract from existing PDFs, DOCX, XLSX |
 | FOA analysis | Read 50+ page PDF, extract requirements manually | Automated extraction with structured output |
 | Competitive landscape | Ad hoc Google searches | Systematic funded grants database queries (OpenAIRE) |
 | Literature review | Weeks of manual searching | Multi-database parallel search (S2 + 78 databases) |
 | Section writing | Blank page, agency guidelines open in another tab | Agency-aware templates with word limit tracking |
-| Budget | Spreadsheet with manual calculations | Automated person-months / salary model calculation |
+| Budget | Spreadsheet with manual calculations | Automated person-months / monthly salary calculation |
 | Compliance | Manual checklist before submission | Automated word counts, section validation, citation checks |
-| Peer review | Ask colleagues (if available) | Claude 3-persona panel + optional Codex panel (dual multi-perspective) |
+| Fact checking | Trust what you wrote | 5-pass verification with journalism-grade evidence trails |
+| Peer review | Ask colleagues (if available) | Claude 3-persona panel + optional Codex panel (6 reviewers total) |
 | Revision | Start over with reviewer comments | Structured point-by-point revision with re-review |
-
-The result is a faster, more systematic process that catches compliance issues early and provides structured feedback before submission.
 
 ## Supported Agencies
 
-| Agency | Mechanism | Region | Template Dir | Budget Model |
-|--------|-----------|--------|-------------|-------------|
-| Horizon Europe | RIA (Research & Innovation Action) | EU | `horizon_ria/` | person-months |
-| Horizon Europe | IA (Innovation Action) | EU | `horizon_ia/` | person-months |
-| ERC | Starting / Consolidator / Advanced | EU | `erc/` | person-months |
-| MSCA | Postdoctoral Fellowships | EU | `msca_postdoc/` | person-months |
-| MSCA | Doctoral Networks | EU | `msca_doctoral/` | person-months |
-| UEFISCDI | PCE (Exploratory Research) | Romania | `uefiscdi_pce/` | monthly salary (RON) |
-| UEFISCDI | TE (Young Research Teams) | Romania | `uefiscdi_te/` | monthly salary (RON) |
-| UEFISCDI | PD (Postdoctoral Research) | Romania | `uefiscdi_pd/` | monthly salary (RON) |
-| PNRR | Component 9 (R&D Support) | Romania | `pnrr/` | monthly salary (RON) |
+### EU Agencies
+
+| Agency | Mechanism | Template | Budget Model |
+|--------|-----------|----------|-------------|
+| Horizon Europe | RIA (Research & Innovation Action) | `horizon_ria/` | person-months (EUR) |
+| Horizon Europe | IA (Innovation Action) | `horizon_ia/` | person-months (EUR) |
+| ERC | Starting / Consolidator / Advanced | `erc/` | person-months (EUR) |
+| MSCA | Postdoctoral Fellowships | `msca_postdoc/` | person-months (EUR) |
+| MSCA | Doctoral Networks | `msca_doctoral/` | person-months (EUR) |
+
+### Romanian Agencies
+
+| Agency | Mechanism | Template | Budget Model |
+|--------|-----------|----------|-------------|
+| UEFISCDI | PCE (Exploratory Research) | `uefiscdi_pce/` | monthly salary (RON) |
+| UEFISCDI | TE (Young Research Teams) | `uefiscdi_te/` | monthly salary (RON) |
+| UEFISCDI | PD (Postdoctoral Research) | `uefiscdi_pd/` | monthly salary (RON) |
+| PNRR | Component 9 (R&D Support) | `pnrr/` | monthly salary (RON) |
 
 ## Quick Start
 
 ### Prerequisites
 
 - [Claude Code](https://claude.ai/claude-code) CLI
+- [uv](https://docs.astral.sh/uv/) (Python package manager)
 - Python 3.11+
 
-No LaTeX installation needed. All output is Markdown. Convert to Word/PDF at submission time via `/docx` or `/pdf` skills.
+No LaTeX needed. All output is Markdown. Convert to Word/PDF at submission time via `/docx` or `/pdf` skills.
 
 ### Install
 
-**Option A -- One command install** (recommended):
+**One command** (recommended):
 ```bash
 curl -fsSL https://raw.githubusercontent.com/stamate/grant-writer-skills/main/scripts/install.sh | bash
 ```
-Creates `.venv`, installs Python deps, adds all 3 Claude Code plugins at project scope (grant-writer-skills + codex-plugin-cc + claude-scientific-skills), and creates a `CLAUDE.md`.
 
-**Option B -- Minimal** (plugin only, no Python deps):
+This installs:
+- `.venv` with all Python dependencies
+- **grant-writer-skills** — the core pipeline (this plugin)
+- **codex-plugin-cc** — multi-persona grant review with 14 agency calibrations
+- **claude-scientific-skills** — 134 research skills (literature, databases, visualization)
+- **claude-hud** — status line display
+
+All plugins installed at project scope. A `CLAUDE.md` is created with usage instructions.
+
+**Minimal** (plugin only, add companions manually):
 ```bash
 claude plugin marketplace add stamate/grant-writer-skills
 claude plugin install grant-writer@grant-writer-skills
@@ -87,212 +105,237 @@ claude plugin install grant-writer@grant-writer-skills
 uv run grant-writer-verify
 ```
 
-Checks Python version, required packages, Claude Code CLI, and optional companions (Codex, scientific skills) in one go.
+Checks Python, packages, Claude Code CLI, and optional companions (Codex, scientific skills).
 
 ## Getting Started
 
 After installation, describe your task in natural language. Below are realistic starting points.
 
-### 1. Run the Full Pipeline (Start Here)
+### 1. Full Pipeline with Existing Documents (Fastest Start)
 
-**You say:**
-> /grant-writer --foa call_document.pdf --agency horizon --mechanism ria
+If you already have your CV, papers, budget spreadsheet, and the FOA document:
 
-**What happens:**
-- Claude extracts requirements from the funding opportunity PDF,
-- queries OpenAIRE for competing funded projects,
-- iteratively generates and refines objectives with your approval,
-- searches literature across multiple databases,
-- writes each proposal section respecting agency word limits,
-- prepares budget (person-months model for EU),
-- validates compliance against agency rules,
-- assembles the full proposal and runs peer review,
-- presents scores, strengths, weaknesses, and a revision plan.
+```
+/grant-writer --foa call_document.pdf --agency horizon --mechanism ria --docs ~/my-grant-materials/
+```
 
-### 2. Just Refine Your Aims
+The system will:
+1. Auto-import your documents (CV → biosketch, papers → preliminary data, budget → input)
+2. Parse the FOA and extract requirements
+3. Query OpenAIRE for competing funded projects
+4. Generate and iteratively refine objectives with your approval
+5. Write each section with imported context, respecting agency word limits
+6. Prepare budget from your spreadsheet data
+7. Run compliance checks + 5-pass fact verification
+8. Run dual multi-perspective peer review (Claude + Codex panels)
+9. Present scores, weaknesses, and a revision plan
 
-**You say:**
-> /grant-writer:aims --proposal-dir ./my_proposal --max-rounds 3
+### 2. Full Pipeline from Scratch
 
-**What happens:**
-- Claude generates initial objectives from your research question and FOA requirements,
-- scores them against agency criteria (excellence, impact, implementation),
-- revises weak points iteratively,
-- optionally gets Codex adversarial feedback,
-- presents each round for your approval.
+```
+/grant-writer --foa call_document.pdf --agency uefiscdi --mechanism pce --lang en
+```
 
-### 3. Review an Existing Proposal
+Same pipeline, but the system asks for information at each human checkpoint instead of importing documents.
 
-**You say:**
-> /grant-writer:review --proposal-dir ./my_proposal
+### 3. Just Refine Your Aims
 
-**What happens:**
-- Claude runs a 3-persona panel (Scientific Reviewer, Program Officer, Feasibility Assessor) against agency criteria,
-- if Codex is available, runs a 3-persona panel review (Scientific Reviewer, Program Officer, Feasibility Assessor),
-- if scientific skills are available, runs GRADE evidence assessment,
-- merges all reviews with consensus, disagreements, and priority actions.
+```
+/grant-writer:aims --proposal-dir ./my_proposal --max-rounds 3
+```
 
-### 4. Competitive Landscape Search
+Iteratively generates, scores, and refines objectives against agency criteria. Optional Codex adversarial feedback.
 
-**You say:**
-> /grant-writer:landscape --agency horizon --query "spatial transcriptomics single cell" --pi-name "Maria Popescu"
+### 4. Review an Existing Proposal
 
-**What happens:**
-- Queries OpenAIRE for funded Horizon Europe projects matching your topic,
-- looks up the PI's own funded grants for overlap analysis,
-- if scientific skills are available, searches recent publications by funded PIs,
-- produces a competitive brief with top competing projects, trends, gaps, and differentiation opportunities.
+```
+/grant-writer:review --proposal-dir ./my_proposal
+```
 
-### 5. Prepare a Resubmission
+Runs dual multi-perspective panel:
+- **Claude panel**: 3 parallel personas (Scientific Reviewer, Program Officer, Feasibility Assessor) with confidence-weighted synthesis
+- **Codex panel** (if installed): 3 additional personas via GPT-5.4 + Panel Chair synthesis
+- Cross-panel agreements are the highest-confidence findings
 
-**You say:**
-> /grant-writer:resubmission --proposal-dir ./my_proposal --reviews evaluation_summary.pdf
+### 5. Fact-Check Before Submission
 
-**What happens:**
-- Extracts reviewer comments from the evaluation summary report PDF,
-- parses each criticism with severity, category, and affected section,
-- generates a point-by-point response plan,
-- you prioritize which criticisms to address, then run `/grant-writer:revision` to implement changes.
+```
+/grant-writer:fact-check --proposal-dir ./my_proposal
+```
+
+5-pass verification:
+1. **Citations**: Every reference checked against S2/CrossRef/DOI
+2. **External facts**: Statistics, companies, claims verified via web + 78 databases
+3. **Claim-source alignment**: Cited claims match what papers actually say
+4. **Cross-model check**: Codex independently flags what Claude missed
+5. **Internal consistency**: Budget vs approach, timeline vs scope, number consistency
+
+Produces a journalism-grade fact-check report with evidence trails, source credibility tiers, and graduated ratings.
+
+### 6. Competitive Landscape Search
+
+```
+/grant-writer:landscape --agency horizon --query "spatial transcriptomics" --pi-name "Maria Popescu"
+```
+
+Queries OpenAIRE for funded projects, checks PI's own grants for overlap, produces competitive brief.
+
+### 7. Import Documents Only
+
+```
+/grant-writer:import-docs --docs ~/my-materials/ --proposal-dir ./my_proposal
+```
+
+Scans your folder, classifies each document (CV, paper, budget, letter, FOA...), extracts structured data, and pre-populates proposal sections. Reports what was imported and what still needs manual input.
+
+### 8. Prepare a Resubmission
+
+```
+/grant-writer:resubmission --proposal-dir ./my_proposal --reviews evaluation_summary.pdf
+```
+
+Parses previous reviewer feedback, generates point-by-point response plan.
 
 ## Pipeline Overview
 
 ```
-/grant-writer --foa call.pdf --agency horizon --mechanism ria
+/grant-writer --foa call.pdf --agency horizon --mechanism ria --docs ~/materials/
 ```
 
 One command triggers the full lifecycle:
 
 ```
- 0. Setup           -->  environment, companions, agency config
- 0.5 Import Docs    -->  auto-extract from PI's CVs, papers, budgets, letters
- 1. FOA Analysis    -->  parse funding opportunity, extract requirements
- 1.5 Landscape      -->  funded grants DB + literature + market analysis
- 2. Aims            -->  specific objectives with iterative refinement
- 3. Literature      -->  systematic search, gap identification, citations
- 4. Preliminary     -->  assess PI's existing evidence
-    Data
- 5. Proposal        -->  project summary first, then agency-specific sections
-    Writing
- 5.5 Risk &         -->  What-If-Oracle scenarios + risk matrix
-     Feasibility
- 6. Budget          -->  person-months (EU) or monthly salary (Romania)
- 7. Supporting      -->  CVs, facilities, DMP, ethics, letters
-    Docs
- 8. Compliance      -->  word counts, required sections, structure validation
- 8.5 Assembly       -->  compile all sections into final/proposal.md
- 8.7 Fact Check     -->  citation verification, claim-source alignment, cross-model check
- 9. Review          -->  Claude 3-persona panel + optional Codex panel (dual multi-perspective)
-10. Revision        -->  address weaknesses, re-assemble, re-review
+ 0.   Setup           →  environment, companions, agency config
+ 0.5  Import Docs     →  auto-extract from PI's CVs, papers, budgets, letters
+ 1.   FOA Analysis    →  parse funding opportunity, extract requirements
+ 1.5  Landscape       →  funded grants DB + literature + market analysis
+ 2.   Aims            →  specific objectives with iterative refinement
+ 3.   Literature      →  systematic search, gap identification, citations
+ 4.   Preliminary     →  assess PI's existing evidence
+      Data
+ 5.   Proposal        →  project summary first, then agency-specific sections
+      Writing
+ 5.5  Risk &          →  What-If-Oracle scenarios + risk matrix
+      Feasibility
+ 6.   Budget          →  person-months (EU) or monthly salary (Romania)
+ 7.   Supporting      →  CVs, facilities, DMP, ethics, letters
+      Docs
+ 8.   Compliance      →  word counts, required sections, structure validation
+ 8.5  Assembly        →  compile all sections into final/proposal.md
+ 8.7  Fact Check      →  5-pass verification with journalism-grade evidence trails
+ 9.   Review          →  Claude 3-persona panel + optional Codex panel
+10.   Revision        →  address weaknesses, re-assemble, re-review
 ```
 
-Human checkpoints at phases 1, 2, 4, 5, 6, 7, and 9 ensure PI control over every major decision.
+**Human checkpoints** at phases 0.5, 1, 2, 4, 5, 6, 7, 8.7, and 9 ensure PI control over every major decision.
 
 ## Skills Reference
 
-15 skills covering the complete grant proposal lifecycle.
+17 skills covering the complete grant proposal lifecycle.
 
 ### Pipeline Orchestration
 
-| Type | Skill | Description |
-|------|-------|-------------|
-| Orchestrator | `/grant-writer` | Full pipeline: FOA analysis -> landscape -> aims -> writing -> review -> revision. Supports `--skip-review`, `--use-codex`, `--no-scientific-skills`. |
+| Skill | Description |
+|-------|-------------|
+| `/grant-writer` | Full pipeline orchestrator. Supports `--foa`, `--agency`, `--mechanism`, `--docs`, `--lang`, `--skip-review`, `--use-codex`, `--no-codex`, `--no-scientific-skills`. |
 
-### Analysis & Planning
+### Document Import & Analysis
 
-| Type | Skill | Description |
-|------|-------|-------------|
-| Skill | `/grant-writer:import-docs` | Auto-extract from PI's existing documents — CVs, papers, budgets, letters, previous proposals. Pre-populates proposal sections. |
-| Skill | `/grant-writer:foa-analysis` | Parse funding opportunity announcements (PDF, HTML, URL). Extract eligibility, word limits, sections, deadlines. |
-| Skill | `/grant-writer:landscape` | Competitive intelligence from OpenAIRE (EU) and UEFISCDI databases. Funded grants, overlap analysis, prior support. |
-| Skill | `/grant-writer:aims` | Iterative objectives/aims refinement with agency-criteria scoring. Optional Codex adversarial review. |
-| Skill | `/grant-writer:literature` | Systematic multi-database literature search. Gap identification and formatted citations. |
-| Skill | `/grant-writer:preliminary-data` | Assess PI's existing evidence. Review figures with vision. Link evidence to objectives. |
+| Skill | Description |
+|-------|-------------|
+| `/grant-writer:import-docs` | Auto-extract from PI's existing documents (PDF, DOCX, XLSX, PPTX, images, BibTeX). Classifies each, extracts structured data, pre-populates proposal. |
+| `/grant-writer:foa-analysis` | Parse funding opportunity announcements (PDF, HTML, URL). Extract eligibility, word limits, sections, deadlines. |
+| `/grant-writer:landscape` | Competitive intelligence from OpenAIRE (EU) and UEFISCDI. Funded grants, overlap analysis, prior support, differentiation. |
 
-### Writing & Budget
+### Research & Writing
 
-| Type | Skill | Description |
-|------|-------|-------------|
-| Skill | `/grant-writer:proposal` | Write agency-specific proposal sections with word limit tracking. Project summary first. |
-| Skill | `/grant-writer:risk-analysis` | Structured risk assessment (5 categories) with mitigation strategies. Uses What-If-Oracle. |
-| Skill | `/grant-writer:budget` | Budget preparation: person-months (EU) or monthly salary (Romania). Multi-year projection. |
-| Skill | `/grant-writer:supporting-docs` | Generate CVs, facilities, DMP, ethics self-assessment, consortium agreements, letters of support. |
+| Skill | Description |
+|-------|-------------|
+| `/grant-writer:aims` | Iterative objectives refinement with agency-criteria scoring. Optional Codex adversarial review. |
+| `/grant-writer:literature` | Systematic multi-database literature search. Gap identification and formatted citations. |
+| `/grant-writer:preliminary-data` | Assess PI's existing evidence. Review figures with vision. Link evidence to objectives. |
+| `/grant-writer:proposal` | Write agency-specific proposal sections with word limit tracking. Project summary first. |
+| `/grant-writer:risk-analysis` | Structured risk assessment (5 categories) with mitigation strategies. Uses What-If-Oracle. |
+| `/grant-writer:budget` | Budget preparation: person-months (EU) or monthly salary (Romania). Multi-year projection. |
+| `/grant-writer:supporting-docs` | Generate CVs, facilities, DMP, ethics self-assessment, consortium agreements, letters of support. |
 
-### Review & Compliance
+### Quality Assurance & Review
 
-| Type | Skill | Description |
-|------|-------|-------------|
-| Skill | `/grant-writer:compliance` | Validate structure, word counts, bibliography completeness, budget caps, figure references. |
-| Skill | `/grant-writer:fact-check` | Multi-pass hallucination checker — citation verification, claim-source alignment, cross-model fact check. |
-| Skill | `/grant-writer:review` | Claude 3-persona panel + optional Codex panel (dual multi-perspective) + optional GRADE evidence assessment. |
-| Optional | `/grant-writer:codex-review` | Standalone Codex grant review with 3-persona panel (requires codex-plugin-cc). |
-| Skill | `/grant-writer:resubmission` | Parse previous evaluation summary reports. Generate point-by-point response plan. |
-| Skill | `/grant-writer:revision` | Address review feedback, revise affected sections, re-check compliance, re-review. |
+| Skill | Description |
+|-------|-------------|
+| `/grant-writer:compliance` | Validate structure, word counts, bibliography, budget caps, figure references. Blocks assembly on critical violations. |
+| `/grant-writer:fact-check` | 5-pass hallucination checker with journalism-grade evidence trails, graduated ratings (Verified → Fabricated), source credibility tiers (T1-T5), and cross-model verification. |
+| `/grant-writer:review` | Claude 3-persona panel (Scientific Reviewer, Program Officer, Feasibility Assessor) + optional Codex 3-persona panel. Cross-panel analysis identifies highest-confidence findings. |
+| `/grant-writer:codex-review` | Standalone Codex grant review with agency calibration (requires codex-plugin-cc). |
+| `/grant-writer:resubmission` | Parse previous evaluation summary reports. Generate point-by-point response plan. |
+| `/grant-writer:revision` | Address review feedback, revise affected sections, re-check compliance, re-fact-check, re-review. |
 
 ## Python Tools
 
-All tools are installed as CLI entry points via `[project.scripts]` in `pyproject.toml`. Use `uv run` to invoke them.
+All tools are installed as CLI entry points. Use `uv run` to invoke them.
 
 | Command | Purpose |
 |---------|---------|
-| `uv run grant-writer-agency` | Load agency rules from `agency.json` manifests. List agencies, show sections, budget rules, review criteria. |
-| `uv run grant-writer-grants` | Query public funding databases (OpenAIRE for EU, UEFISCDI for Romania). Search by topic, PI, agency. |
-| `uv run grant-writer-compliance` | Validate proposal against agency requirements: word counts, sections, citations, budget caps, figures. |
-| `uv run grant-writer-budget` | Budget arithmetic for person-months (EU) and monthly salary (Romania) models. Multi-year, multi-currency. |
-| `uv run grant-writer-state` | Grant proposal state persistence. Track phase completion, section progress, resume interrupted pipelines. |
-| `uv run grant-writer-config` | Load and merge YAML configuration with CLI overrides. |
-| `uv run grant-writer-verify` | Validate all prerequisites (Python, packages, Claude CLI, optional Codex, scientific skills). |
-| `pdf_reader.py` | PDF text extraction for FOAs and evaluation reports (pymupdf4llm > PyMuPDF > pypdf fallback). |
+| `uv run grant-writer-verify` | Validate all prerequisites (Python, packages, Claude CLI, Codex, scientific skills) |
+| `uv run grant-writer-agency` | Load agency rules from `agency.json` manifests. List agencies, sections, budget rules, review criteria |
+| `uv run grant-writer-grants` | Query funded grants databases (OpenAIRE for EU). Search by topic, PI, agency |
+| `uv run grant-writer-compliance` | Validate proposal: word counts, required sections, citations, budget caps, figures |
+| `uv run grant-writer-budget` | Budget calculation: person-months (EU) or monthly salary (Romania). Multi-year, multi-currency |
+| `uv run grant-writer-state` | Proposal state persistence. Track phases, section progress, resume interrupted pipelines |
+| `uv run grant-writer-config` | Load and display YAML configuration with CLI overrides |
+| `uv run grant-writer-pdf` | PDF text extraction for FOAs and evaluation reports |
 
 ## Project Structure
 
 ```
 grant-writer-skills/
-├── .claude-plugin/
-│   └── plugin.json            # Agent Skills plugin manifest
-├── skills/                    # 15 skills (Agent Skills standard)
-│   ├── grant-writer/SKILL.md    #   Main orchestrator
-│   ├── foa-analysis/SKILL.md    #   FOA parser
-│   ├── landscape/SKILL.md       #   Competitive intelligence
-│   ├── aims/SKILL.md            #   Objectives refinement
-│   ├── literature/SKILL.md      #   Literature search
-│   ├── preliminary-data/SKILL.md #  Evidence assessment
-│   ├── proposal/SKILL.md        #   Section writing
-│   ├── risk-analysis/SKILL.md   #   Risk assessment
-│   ├── budget/SKILL.md          #   Budget preparation
-│   ├── supporting-docs/SKILL.md #   Supporting documents
-│   ├── compliance/SKILL.md      #   Compliance validation
-│   ├── review/SKILL.md          #   Combined review
-│   ├── codex-review/SKILL.md    #   Standalone Codex review
-│   ├── resubmission/SKILL.md    #   Resubmission handler
-│   └── revision/SKILL.md        #   Revision loop
-├── tools/                     # Python utilities (CLI entry points via uv run grant-writer-*)
-│   ├── agency_requirements.py   #   grant-writer-agency
-│   ├── funded_grants.py         #   grant-writer-grants
-│   ├── compliance_checker.py    #   grant-writer-compliance
-│   ├── budget_calculator.py     #   grant-writer-budget
-│   ├── state_manager.py         #   grant-writer-state
-│   ├── config.py                #   grant-writer-config
-│   ├── verify_setup.py          #   grant-writer-verify
-│   └── pdf_reader.py            #   grant-writer-pdf
+├── skills/                      # 17 skills (Agent Skills standard)
+│   ├── grant-writer/SKILL.md      # Orchestrator
+│   ├── import-docs/SKILL.md       # Document import
+│   ├── foa-analysis/SKILL.md      # FOA parser
+│   ├── landscape/SKILL.md         # Competitive intelligence
+│   ├── aims/SKILL.md              # Objectives refinement
+│   ├── literature/SKILL.md        # Literature search
+│   ├── preliminary-data/SKILL.md  # Evidence assessment
+│   ├── proposal/SKILL.md          # Section writing
+│   ├── risk-analysis/SKILL.md     # Risk assessment
+│   ├── budget/SKILL.md            # Budget preparation
+│   ├── supporting-docs/SKILL.md   # Supporting documents
+│   ├── compliance/SKILL.md        # Compliance validation
+│   ├── fact-check/SKILL.md        # Fact verification
+│   ├── review/SKILL.md            # Multi-persona review
+│   ├── codex-review/SKILL.md      # Standalone Codex review
+│   ├── resubmission/SKILL.md      # Resubmission handler
+│   └── revision/SKILL.md          # Revision loop
+├── tools/                       # Python CLI tools (uv run grant-writer-*)
+│   ├── agency_requirements.py     # grant-writer-agency
+│   ├── funded_grants.py           # grant-writer-grants
+│   ├── compliance_checker.py      # grant-writer-compliance
+│   ├── budget_calculator.py       # grant-writer-budget
+│   ├── state_manager.py           # grant-writer-state
+│   ├── config.py                  # grant-writer-config
+│   ├── verify_setup.py            # grant-writer-verify
+│   └── pdf_reader.py              # grant-writer-pdf
 ├── templates/
-│   ├── agencies/                #   9 agency templates (agency.json + section templates)
-│   │   ├── horizon_ria/
-│   │   ├── horizon_ia/
-│   │   ├── erc/
-│   │   ├── msca_postdoc/
-│   │   ├── msca_doctoral/
-│   │   ├── uefiscdi_pce/
-│   │   ├── uefiscdi_te/
-│   │   ├── uefiscdi_pd/
-│   │   └── pnrr/
-│   ├── grant_config.yaml        #   Default configuration
-│   └── review_fewshot/          #   Few-shot review examples
-├── examples/                  # Example proposal directories
+│   ├── agencies/                  # 9 agency templates
+│   │   ├── horizon_ria/           #   Horizon Europe RIA
+│   │   ├── horizon_ia/            #   Horizon Europe IA
+│   │   ├── erc/                   #   European Research Council
+│   │   ├── msca_postdoc/          #   MSCA Postdoctoral
+│   │   ├── msca_doctoral/         #   MSCA Doctoral Networks
+│   │   ├── uefiscdi_pce/          #   UEFISCDI Exploratory
+│   │   ├── uefiscdi_te/           #   UEFISCDI Young Teams
+│   │   ├── uefiscdi_pd/           #   UEFISCDI Postdoctoral
+│   │   └── pnrr/                  #   Romania PNRR
+│   └── grant_config.yaml          # Default configuration
+├── examples/                    # Example proposal directories
 ├── scripts/
-│   └── install.sh             #   One-command install (curl | bash)
-├── CLAUDE.md                  # Claude Code project instructions
+│   └── install.sh               # One-command install (curl | bash)
+├── CLAUDE.md
+├── README.md
+├── pyproject.toml
 ├── requirements.txt
-└── pyproject.toml
+└── uv.lock
 ```
 
 ## Configuration
@@ -302,17 +345,17 @@ Edit `templates/grant_config.yaml` or pass overrides at runtime:
 ```yaml
 agency: horizon
 mechanism: ria
-language: en
+language: en                 # en | ro (Romanian templates only)
 
 proposal:
   title: ""
   pi_name: ""
   institution: ""
-  acronym: ""              # EU proposals need a project acronym
+  acronym: ""                # EU proposals need a project acronym
 
 aims:
   max_refinement_rounds: 5
-  score_threshold: 4       # Out of 5 (EU scale)
+  score_threshold: 4         # Out of 5 (EU scale)
   codex_review_rounds: 2
 
 literature:
@@ -323,92 +366,73 @@ writing:
   reflection_rounds: 3
 
 budget:
-  indirect_rate: 0.25      # 25% flat rate for Horizon Europe
-  currency: EUR
+  indirect_rate: 0.25        # 25% flat rate for Horizon Europe
+  currency: EUR              # EUR for EU, RON for Romania
 
 review:
   revision_cycles: 2
-  score_threshold: 3       # Out of 5 (EU: threshold for funding)
+  score_threshold: 3         # Out of 5 (EU: threshold for funding)
 
 scientific_skills:
-  enabled: auto
-  enhanced_literature: true
-  enhanced_writing: true
-  enhanced_figures: true
-  enhanced_review: true
-
+  enabled: auto              # auto | true | false
 codex:
-  enabled: auto
-  panel_review: true
-  aims_review: true
-  rescue_on_stuck: true
-  agency: auto
+  enabled: auto              # auto | true | false
 ```
 
-### Environment Variables
+Override specific values without editing the file:
+```bash
+uv run grant-writer-config --config templates/grant_config.yaml --set agency=uefiscdi mechanism=pce budget.currency=RON
+```
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `S2_API_KEY` | No | Semantic Scholar API key for higher rate limits. Falls back to unauthenticated access or WebSearch. |
+## Companion Plugins
 
-## Scientific Skills Integration
+The install script sets up all companions automatically. They're optional — the pipeline works without them.
 
-Install the [claude-scientific-skills](https://github.com/stamate/claude-scientific-skills) plugin for enhanced research capabilities:
+### Codex (codex-plugin-cc)
+
+Adds a **second AI model** (GPT-5.4) for independent review. When installed:
+- **Agency-calibrated panel review**: 3 personas (Scientific Reviewer, Program Officer, Feasibility Assessor) + Panel Chair synthesis. 14 agency calibrations including MSCA, UEFISCDI, PNRR.
+- **Adversarial aims review**: Independent critique during objectives refinement
+- **Cross-model fact checking**: Codex flags claims Claude missed (different model = different knowledge)
+- **Rescue**: Fresh perspective when section writing stalls
 
 ```bash
-claude plugin marketplace add stamate/claude-scientific-skills
-claude plugin install scientific-skills@claude-scientific-skills
-```
-
-When scientific skills are available, the pipeline automatically:
-- Uses **78+ scientific databases** (UniProt, STRING, PubChem, ChEMBL, Reactome, etc.) during landscape and literature phases
-- Searches **10 academic databases** (PubMed, arXiv, bioRxiv, OpenAlex, etc.) for literature
-- Applies **IMRAD prose structure** and **DOI verification** during proposal writing
-- Generates **methodology flowcharts**, **Gantt charts**, and **work package diagrams** via `/scientific-schematics`
-- Runs **What-If-Oracle** scenario analysis during risk assessment
-- Runs **GRADE evidence assessment** and **bias detection** during review
-
-Disable with `--no-scientific-skills` or in config:
-```yaml
-scientific_skills:
-  enabled: false
-```
-
-## Codex Integration
-
-Install the [codex-plugin-cc](https://github.com/stamate/codex-plugin-cc) plugin for enhanced reviews:
-
-```bash
+# Manual install (install.sh does this automatically)
 claude plugin marketplace add stamate/codex-plugin-cc
-claude plugin install codex@stamate-codex
-npm install -g @openai/codex
-codex login
+claude plugin install codex@stm-codex
+npm install -g @openai/codex && codex login
 ```
 
-When Codex is available, the pipeline automatically:
-- Runs **agency-calibrated panel review** with 3 personas (Scientific Reviewer, Program Officer, Feasibility Assessor) + synthesis
-- Performs **adversarial aims review** during objectives refinement
-- Provides **rescue delegation** when section writing stalls
+### Scientific Skills (claude-scientific-skills)
 
-Disable with `--no-codex` or in config:
-```yaml
-codex:
-  enabled: false
+Adds **134 specialized research skills**. When installed:
+- **78+ scientific databases** (UniProt, STRING, PubChem, WHO, Eurostat, etc.) during landscape and fact checking
+- **10 academic databases** (PubMed, arXiv, bioRxiv, OpenAlex, etc.) for literature
+- **IMRAD prose structure** and **DOI verification** during writing
+- **Methodology flowcharts**, **Gantt charts**, and **work package diagrams**
+- **What-If-Oracle** scenario analysis during risk assessment
+- **GRADE evidence assessment** during review
+
+```bash
+# Manual install (install.sh does this automatically)
+claude plugin marketplace add K-Dense-AI/claude-scientific-skills
+claude plugin install scientific-skills@claude-scientific-skills
 ```
 
 ## Output Format
 
 All proposal output is **Markdown** (`.md` files). This is intentional:
-- Both Claude and Codex read Markdown natively
-- Easy to version control with git
-- Human-readable at every stage
+- Both Claude and Codex read Markdown natively — no conversion needed for review
+- Easy to version control with git (diff-friendly)
+- Human-readable and editable at every stage
+- PI can open and edit any section in any text editor
 
 At submission time, convert to the required format:
 ```bash
-# Word document (for most EU/Romanian portals)
+# Word document (for most EU/Romanian submission portals)
 claude "/docx final/proposal.md"
 
-# PDF (for agencies that accept PDF uploads)
+# PDF
 claude "/pdf final/proposal.md"
 ```
 
@@ -418,21 +442,14 @@ All Romanian agency templates (UEFISCDI PCE/TE/PD, PNRR) support bilingual outpu
 
 ```bash
 # English (default)
-claude "/grant-writer --foa call.pdf --agency uefiscdi --mechanism pce"
+/grant-writer --agency uefiscdi --mechanism pce
 
-# Romanian section headers and boilerplate, English scientific content
-claude "/grant-writer --foa call.pdf --agency uefiscdi --mechanism pce --lang ro"
+# Romanian headers + English scientific content
+/grant-writer --agency uefiscdi --mechanism pce --lang ro
 ```
 
-With `--lang ro`:
-- Section headers use Romanian names (e.g., "Rezumatul proiectului", "Starea actuala a cunoasterii")
-- Boilerplate text (declarations, ethics statements) in Romanian
-- Scientific content remains in English for international review panels
+With `--lang ro`: section headers use Romanian names (e.g., "Rezumatul proiectului"), boilerplate in Romanian, scientific content in English for international review panels.
 
 ## License
 
-See [LICENSE](LICENSE) for full terms.
-
-## Acknowledgments
-
-Built with [Claude Code](https://claude.ai/claude-code) CLI.
+MIT — see [LICENSE](LICENSE).
