@@ -4,6 +4,10 @@
       "type": "prompt",
       "path": "skills/grant-writer/SKILL.md"
     },
+    "grant-writer:import-docs": {
+      "type": "prompt",
+      "path": "skills/import-docs/SKILL.md"
+    },
     "grant-writer:foa-analysis": {
       "type": "prompt",
       "path": "skills/foa-analysis/SKILL.md"

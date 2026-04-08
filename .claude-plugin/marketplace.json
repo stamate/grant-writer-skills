@@ -14,6 +14,7 @@
       "source": "./",
       "skills": [
         "./skills/grant-writer",
+        "./skills/import-docs",
         "./skills/foa-analysis",
         "./skills/landscape",
         "./skills/aims",

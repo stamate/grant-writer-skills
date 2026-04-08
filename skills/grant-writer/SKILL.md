@@ -15,6 +15,7 @@ You are an autonomous grant writing agent that orchestrates the complete grant p
 - `--mechanism <name>`: Mechanism type (ria, ia, starting, consolidator, advanced, postdoc, doctoral, pce, te, pd)
 - `--config <path>`: Path to config YAML (default: `templates/grant_config.yaml`)
 - `--proposal-dir <path>`: Resume from existing proposal directory
+- `--docs <path>`: Folder with PI's existing documents (CVs, papers, budgets, letters) for auto-import
 - `--lang <en|ro>`: Language for Romanian templates (default: en)
 - `--skip-review`: Skip review phase
 - `--reviews <path>`: Path to previous evaluation summary report PDF (triggers resubmission phase)
@@ -28,6 +29,7 @@ Parse from the user's message. If neither `--agency` nor `--foa` is provided, as
 
 ```
  0.   Setup              →  environment, companions, agency config
+ 0.5  Import Documents   →  auto-extract from PI's existing docs (CVs, papers, budgets, letters)
  1.   FOA Analysis       →  parse funding opportunity, extract requirements
  1.5  Competitive        →  funded grants DB + literature + market analysis
       Landscape
@@ -113,6 +115,28 @@ Parse from the user's message. If neither `--agency` nor `--foa` is provided, as
    Print result:
    - If enabled: "Codex detected — agency-calibrated panel review enabled"
    - If disabled: "Codex not enabled — using Claude-only review pipeline"
+
+### Phase 0.5: Import Source Documents
+
+**Ask the PI**: "Do you have a folder with existing documents (CV, papers, budget spreadsheets, letters of support, previous proposals)? If so, provide the path and I'll auto-extract everything."
+
+If the PI provides a `--docs <path>` argument or answers yes:
+```
+/grant-writer:import-docs --docs <docs_path> --proposal-dir <proposal_dir>
+```
+
+This scans, classifies, and extracts structured information from the PI's documents, pre-populating:
+- `supporting/cv_pi.md` from CVs
+- `budget/budget_input.yaml` from budget spreadsheets
+- `sections/preliminary_data.md` and `sections/figures/` from papers
+- `supporting/letters/` from letters of support
+- `foa_requirements.json` from FOA documents (if provided — may skip Phase 1)
+- `resubmission/previous_reviews.md` from review feedback
+- `sections/bibliography.md` from reference files
+
+Subsequent phases check for pre-populated files and skip redundant questions. The import report shows what was extracted and what still needs manual input.
+
+If the PI has no documents or declines, skip this phase and proceed normally.
 
 ### Phase 1: FOA Analysis
 

@@ -7,6 +7,7 @@ This project provides a complete grant proposal writing pipeline as Claude Code 
 | Command | Description |
 |---------|-------------|
 | `/grant-writer` | Full pipeline: FOA analysis -> landscape -> aims -> writing -> review |
+| `/grant-writer:import-docs` | Auto-extract from PI's existing documents (CVs, papers, budgets, letters) |
 | `/grant-writer:foa-analysis` | Parse funding opportunity announcements |
 | `/grant-writer:landscape` | Competitive intelligence from funding databases |
 | `/grant-writer:aims` | Iterative objectives/aims refinement |

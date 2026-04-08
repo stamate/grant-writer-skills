@@ -164,6 +164,7 @@ One command triggers the full lifecycle:
 
 ```
  0. Setup           -->  environment, companions, agency config
+ 0.5 Import Docs    -->  auto-extract from PI's CVs, papers, budgets, letters
  1. FOA Analysis    -->  parse funding opportunity, extract requirements
  1.5 Landscape      -->  funded grants DB + literature + market analysis
  2. Aims            -->  specific objectives with iterative refinement
@@ -200,6 +201,7 @@ Human checkpoints at phases 1, 2, 4, 5, 6, 7, and 9 ensure PI control over every
 
 | Type | Skill | Description |
 |------|-------|-------------|
+| Skill | `/grant-writer:import-docs` | Auto-extract from PI's existing documents — CVs, papers, budgets, letters, previous proposals. Pre-populates proposal sections. |
 | Skill | `/grant-writer:foa-analysis` | Parse funding opportunity announcements (PDF, HTML, URL). Extract eligibility, word limits, sections, deadlines. |
 | Skill | `/grant-writer:landscape` | Competitive intelligence from OpenAIRE (EU) and UEFISCDI databases. Funded grants, overlap analysis, prior support. |
 | Skill | `/grant-writer:aims` | Iterative objectives/aims refinement with agency-criteria scoring. Optional Codex adversarial review. |

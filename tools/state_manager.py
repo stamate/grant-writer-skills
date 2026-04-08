@@ -21,6 +21,7 @@ import yaml
 
 PHASE_ORDER = [
     "setup",
+    "import_docs",
     "foa_analysis",
     "landscape",
     "aims",
