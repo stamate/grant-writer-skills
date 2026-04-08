@@ -27,7 +27,7 @@ export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could 
 ### 1. Load Agency Requirements
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" sections <agency> <mechanism>
+uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" sections <agency> <mechanism>
 ```
 
 This returns the required sections, word limits, and formatting rules from `agency.json`.
@@ -35,7 +35,7 @@ This returns the required sections, word limits, and formatting rules from `agen
 ### 2. Run Compliance Checker
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" check <proposal_dir>
+uv run python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" check <proposal_dir>
 ```
 
 The checker validates:
@@ -69,12 +69,12 @@ For each violation, provide a specific fix suggestion (e.g., "Section `excellenc
 
 Check word counts in detail:
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" word-counts <proposal_dir>
+uv run python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" word-counts <proposal_dir>
 ```
 
 Check budget specifically:
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" budget-check <proposal_dir>
+uv run python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" budget-check <proposal_dir>
 ```
 
 ### 5. Save Compliance Report
@@ -102,7 +102,7 @@ If **all checks pass**:
 ### 7. Update State
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase compliance --status <complete|failed>
+uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase compliance --status <complete|failed>
 ```
 
 Report:

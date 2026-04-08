@@ -31,7 +31,7 @@ export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could 
 Read the assembled proposal and agency review criteria:
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" review-criteria <agency> <mechanism>
+uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" review-criteria <agency> <mechanism>
 ```
 
 Read the full proposal at `<proposal_dir>/final/proposal.md`. Also read `<proposal_dir>/config.yaml` for agency, mechanism, and companion settings.
@@ -203,7 +203,7 @@ Ask the PI: "Would you like to proceed to revision to address the identified wea
 ### 7. Update State
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase review --status complete
+uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase review --status complete
 ```
 
 Report:

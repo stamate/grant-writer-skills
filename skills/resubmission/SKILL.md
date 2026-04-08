@@ -30,7 +30,7 @@ export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could 
 Extract text from the evaluation report PDF:
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/pdf_reader.py" <reviews_path>
+uv run python3 "$GRANTWRITER_ROOT/tools/pdf_reader.py" <reviews_path>
 ```
 
 Read the extracted text carefully. Identify each individual criticism, comment, and suggestion from the reviewers.
@@ -86,7 +86,7 @@ Ask the PI to:
 ### 6. Update State
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase resubmission --status complete
+uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase resubmission --status complete
 ```
 
 Report:

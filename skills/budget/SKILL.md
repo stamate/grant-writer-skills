@@ -29,7 +29,7 @@ export GRANTWRITER_ROOT; if [ -z "$GRANTWRITER_ROOT" ]; then echo "ERROR: Could 
 Read the agency configuration to determine the budget model:
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" budget <agency> <mechanism>
+uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" budget <agency> <mechanism>
 ```
 
 Also read `<proposal_dir>/config.yaml` for budget overrides (indirect rate, currency).
@@ -64,7 +64,7 @@ Save the PI's raw inputs to `<proposal_dir>/budget/budget_input.yaml`.
 Run the budget calculator with the PI's inputs:
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/budget_calculator.py" calculate <proposal_dir>/budget/budget_input.yaml
+uv run python3 "$GRANTWRITER_ROOT/tools/budget_calculator.py" calculate <proposal_dir>/budget/budget_input.yaml
 ```
 
 This produces:
@@ -78,7 +78,7 @@ This produces:
 Generate the formatted budget tables:
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/budget_calculator.py" format <proposal_dir>/budget/budget_input.yaml --style <agency_style>
+uv run python3 "$GRANTWRITER_ROOT/tools/budget_calculator.py" format <proposal_dir>/budget/budget_input.yaml --style <agency_style>
 ```
 
 Where `<agency_style>` is `horizon_wp` for EU or `uefiscdi` for Romania.
@@ -110,7 +110,7 @@ Ask the PI to confirm line items or request adjustments. If adjustments are need
 ### 7. Update State
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase budget --status complete
+uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase budget --status complete
 ```
 
 Report:

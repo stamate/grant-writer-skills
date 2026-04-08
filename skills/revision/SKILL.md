@@ -60,7 +60,7 @@ For each actionable weakness, revise the corresponding section file in `sections
 #### 3b. Re-run Compliance
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" check <proposal_dir>
+uv run python3 "$GRANTWRITER_ROOT/tools/compliance_checker.py" check <proposal_dir>
 ```
 
 If critical violations emerge from the revision (e.g., word count exceeded after adding content), fix them before proceeding.
@@ -76,7 +76,7 @@ Re-assemble `final/proposal.md` from the revised sections:
 6. Validate total word count
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" sections <agency> <mechanism>
+uv run python3 "$GRANTWRITER_ROOT/tools/agency_requirements.py" sections <agency> <mechanism>
 ```
 
 Save the re-assembled proposal to `<proposal_dir>/final/proposal.md`.
@@ -117,7 +117,7 @@ If the revised proposal scores above the threshold on all criteria, recommend fi
 ### 5. Update State
 
 ```bash
-python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase revision --status complete
+uv run python3 "$GRANTWRITER_ROOT/tools/state_manager.py" update <proposal_dir> --phase revision --status complete
 ```
 
 Report:
