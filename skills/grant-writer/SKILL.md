@@ -40,7 +40,7 @@ Parse from the user's message. If neither `--agency` nor `--foa` is provided, as
  7.   Supporting Docs    →  CVs, facilities, DMP, ethics, consortium agreement
  8.   Compliance         →  word counts, required sections, structure validation
  8.5  Assembly           →  compile all sections into final/proposal.md
- 9.   Review             →  Claude review + Codex panel (agency-calibrated)
+ 9.   Review             →  Claude 3-persona panel + optional Codex panel (dual multi-perspective)
  9.5  Resubmission       →  parse previous reviews, plan revisions (if applicable)
 10.   Revision           →  address weaknesses, re-assemble, re-review
 ```
@@ -271,6 +271,11 @@ uv run grant-writer-state update <proposal_dir> --phase assembly --status comple
 
 **Skip if** `--skip-review` is set.
 
+The review runs a **dual multi-perspective panel**:
+- **Claude panel** (always): 3 parallel personas (Scientific Reviewer, Program Officer, Feasibility Assessor) with confidence-weighted synthesis
+- **Codex panel** (if available): 3 additional personas via GPT-5.4 + Panel Chair synthesis
+- **Cross-panel analysis**: Agreements between both panels are the strongest signals
+
 Invoke the review skill. Forward `--no-codex` and `--no-scientific-skills` flags as appropriate:
 ```
 /grant-writer:review --proposal-dir <proposal_dir>
@@ -326,7 +331,7 @@ uv run grant-writer-state status <proposal_dir>
 - **Funded grants API down** (OpenAIRE / UEFISCDI timeout): Skip landscape phase, warn user, continue with literature-only competitive context.
 - **Aims loop stalls** (max rounds reached, PI not satisfied): Save progress to `sections/objectives.md`, allow manual editing, resume when ready.
 - **Budget calculation error**: Present raw numbers from PI input, let PI verify and correct directly in `budget/budget_input.yaml`.
-- **Codex review timeout**: Skip Codex review, Claude review is sufficient on its own. Log warning.
+- **Codex review timeout**: Skip Codex panel, Claude's own 3-persona panel is sufficient. Log warning.
 - **Compliance fails** (critical violations): List all violations, do NOT proceed to assembly/review until ALL critical violations are fixed. Non-critical warnings may proceed with a note.
 - **Scientific-skills unavailable**: Skip enhanced features silently, use S2 + WebSearch for literature.
 

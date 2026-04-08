@@ -39,7 +39,7 @@ This project takes a different approach:
 | Section writing | Blank page, agency guidelines open in another tab | Agency-aware templates with word limit tracking |
 | Budget | Spreadsheet with manual calculations | Automated person-months / salary model calculation |
 | Compliance | Manual checklist before submission | Automated word counts, section validation, citation checks |
-| Peer review | Ask colleagues (if available) | Claude review + Codex agency-calibrated panel |
+| Peer review | Ask colleagues (if available) | Claude 3-persona panel + optional Codex panel (dual multi-perspective) |
 | Revision | Start over with reviewer comments | Structured point-by-point revision with re-review |
 
 The result is a faster, more systematic process that catches compliance issues early and provides structured feedback before submission.
@@ -127,7 +127,7 @@ After installation, describe your task in natural language. Below are realistic 
 > /grant-writer:review --proposal-dir ./my_proposal
 
 **What happens:**
-- Claude reviews `final/proposal.md` against agency-specific criteria,
+- Claude runs a 3-persona panel (Scientific Reviewer, Program Officer, Feasibility Assessor) against agency criteria,
 - if Codex is available, runs a 3-persona panel review (Scientific Reviewer, Program Officer, Feasibility Assessor),
 - if scientific skills are available, runs GRADE evidence assessment,
 - merges all reviews with consensus, disagreements, and priority actions.

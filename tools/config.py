@@ -215,11 +215,10 @@ def parse_config_args(argv=None) -> Config:
             d = d.setdefault(p, {})
         d[parts[-1]] = val
 
-    return load_config(args.config, overrides)
+    cfg = load_config(args.config, overrides)
+    print(yaml.dump(asdict(cfg), default_flow_style=False, sort_keys=False))
+    return cfg
 
-
-# ── Main (self-test) ─────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    cfg = parse_config_args()
-    print(yaml.dump(asdict(cfg), default_flow_style=False, sort_keys=False))
+    parse_config_args()
